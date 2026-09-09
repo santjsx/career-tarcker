@@ -1,0 +1,3044 @@
+I analyzed the roadmap end-to-end. The document is not merely a list of technologies: it defines a **career progression system** from Data Analyst → Strong Data Analyst → Analytics Engineering → Analytics Engineer, with explicit phases, milestones, projects, continuous business-thinking/communication/AI practices, and the rule **“Learn → Build → Apply → Improve → Apply again.”**  
+
+The biggest mistake would be building a generic “course checklist.” That would completely miss the roadmap. The tracker needs to behave like a **career operating system**: learning progress + competency + evidence + projects + revision + job-readiness + application progress.
+
+Below is the PRD I would give to an AI product/UI builder.
+
+# LEARNING PROGRESS TRACKER
+
+## Data Analyst → Analytics Engineer Career Operating System
+
+**Document Type:** Product Requirements Document
+**Product:** Personal Learning Progress & Career Tracker
+**Primary Roadmap:** Data Analyst → Analytics Engineer
+**Design Standard:** Premium SaaS / Professional Developer Tool
+**Platforms:** Responsive Web Application
+**Modes:** Light + Dark
+**Primary Objective:** Convert the supplied 19-phase learning roadmap into a measurable, evidence-driven career progression system.
+
+---
+
+# 1. PRODUCT VISION
+
+Build a premium learning tracker that transforms the Data Analyst → Analytics Engineer roadmap into an interactive progression system.
+
+The product must NOT feel like:
+
+* a basic checklist
+* a Notion template
+* a generic habit tracker
+* a gamified children's learning app
+* a course marketplace
+* a simple progress bar
+
+It should feel like a combination of:
+
+* Linear
+* GitHub
+* modern developer dashboards
+* premium SaaS analytics products
+* professional project-management software
+* competency tracking systems
+
+The core mental model is:
+
+> **Learn → Practice → Demonstrate → Validate → Build → Apply → Improve → Repeat**
+
+The application must measure not only whether a topic was “completed,” but whether the learner has produced enough evidence to reasonably claim competency.
+
+---
+
+# 2. SOURCE ROADMAP — CANONICAL STRUCTURE
+
+The supplied roadmap contains **19 phases**, **4 major projects**, **2 explicit milestones**, a Data Analyst foundation, a Strong Data Analyst stage, an Analytics Engineering specialization, production skills, and a final Analytics Engineer outcome.  
+
+The tracker must preserve this hierarchy exactly.
+
+## Stage A — Data Analyst Foundation
+
+### Phase 1 — SQL Foundations
+
+Goal:
+
+> Query and analyze relational data.
+
+Topics:
+
+* SQL basics
+* Filtering
+* Aggregations
+* CASE WHEN / conditional aggregation
+* Joins
+* Duplicate detection
+* Subqueries
+* CTEs
+* UNION / UNION ALL
+* Window functions
+* Business-oriented SQL problems
+
+Phase priority: **5/5**
+
+---
+
+### Phase 2 — Spreadsheets
+
+Goal:
+
+> Work comfortably with business data.
+
+Tool choice:
+
+* Excel OR Google Sheets
+
+Topics:
+
+* Sorting
+* Filtering
+* Tables
+* Freeze panes
+* Basic formulas
+* Logical functions
+* XLOOKUP
+* VLOOKUP
+* INDEX
+* MATCH
+* Text/date cleaning
+* Pivot tables
+* Charts
+* Conditional formatting
+
+---
+
+### Phase 3 — Statistics
+
+Goal:
+
+> Interpret data correctly.
+
+Topics:
+
+* Descriptive statistics
+* Distributions
+* Skewness
+* Outliers
+* Percentiles
+* Probability
+* Sampling
+* Hypothesis testing
+* Confidence intervals
+* Correlation
+* Causation
+* Confounding
+* Bias
+
+---
+
+### Phase 4 — Power BI
+
+Goal:
+
+> Build dashboards and communicate insights.
+
+Topics:
+
+* Importing CSV
+* Importing Excel
+* Database connections
+* Power Query
+* Relationships
+* Star schemas
+* DAX measures
+* Calculated columns
+* Date tables
+* Time intelligence
+* Visualizations
+* Filters
+* Slicers
+* Drill-through
+* Trends
+* Anomalies
+* Actionable insights
+
+Phase priority: **4/5**
+
+---
+
+# 3. MILESTONE 1 — DATA ANALYST FOUNDATION
+
+The tracker must create a major milestone gate.
+
+Required competencies:
+
+* Strong SQL
+* Excel fundamentals
+* Statistics fundamentals
+* Power BI fundamentals
+* One completed project
+
+Only when the milestone requirements are satisfied should the UI visually recognize:
+
+> **DATA ANALYST FOUNDATION**
+
+The roadmap explicitly instructs the learner to begin applying for Data Analyst roles at this point. 
+
+Therefore the application must NOT force the learner to finish the entire roadmap before showing career readiness.
+
+---
+
+# 4. PROJECT 1 — E-COMMERCE SALES ANALYSIS
+
+Required workflow:
+
+1. Find realistic dataset
+2. Clean dataset
+3. Analyze using SQL
+4. Identify KPIs
+5. Build Power BI dashboard
+6. Write insights
+7. Document project
+8. Upload to GitHub
+
+The project must be represented as a structured deliverable rather than a checkbox. 
+
+---
+
+# 5. STAGE B — STRONG DATA ANALYST
+
+## Phase 5 — Python
+
+Topics:
+
+* Variables
+* Data types
+* Collections
+* Control flow
+* Functions
+* File handling
+* pip
+* Virtual environments
+* requirements.txt
+
+## Phase 6 — Pandas
+
+Topics:
+
+* DataFrames
+* Reading data
+* Inspection
+* Cleaning
+* Missing values
+* Duplicates
+* loc
+* iloc
+* apply
+* map
+* lambdas
+* groupby
+* merge
+* join
+* concat
+* pivot
+* pivot_table
+* melt
+
+Priority: **5/5**
+
+## Phase 7 — APIs and JSON
+
+Topics:
+
+* HTTP
+* APIs
+* Authentication
+* Status codes
+* JSON
+* Nested data
+* Python requests
+* API → Pandas DataFrame
+
+## PROJECT 2 — PYTHON DATA PIPELINE
+
+Architecture:
+
+> API → Python → PostgreSQL → SQL
+
+Deliverables:
+
+* Extract API data
+* Parse data
+* Clean using Pandas
+* Store in PostgreSQL
+* Analyze
+* Document
+* Upload to GitHub
+
+The architecture must be visually represented as a pipeline.
+
+---
+
+# 6. PHASE 8 — DATABASES
+
+Database:
+
+> PostgreSQL
+
+Topics:
+
+* Databases
+* Tables
+* Keys
+* Constraints
+* Relationships
+* CRUD
+* Indexes
+* Normalization
+* Transactions
+* OLTP
+* OLAP
+
+---
+
+# 7. PHASE 9 — DATA MODELING
+
+Topics:
+
+* Fact tables
+* Dimension tables
+* Grain
+* Measures
+* Dimensions
+* Star schema
+* Snowflake schema
+* Natural keys
+* Surrogate keys
+* Normalization
+* Denormalization
+* Slowly Changing Dimensions
+* SCD Type 1
+* SCD Type 2
+
+Priority: **5/5**
+
+---
+
+# 8. MILESTONE 2 — STRONG DATA ANALYST
+
+Required competency group:
+
+* SQL
+* Power BI
+* Python
+* Pandas
+* APIs
+* PostgreSQL
+* Data modeling
+* Two completed projects
+
+After completion, display:
+
+> **STRONG DATA ANALYST**
+
+Then clearly transition the learner into:
+
+> **ANALYTICS ENGINEERING SPECIALIZATION**
+
+This transition must be visually significant.
+
+---
+
+# 9. STAGE C — ANALYTICS ENGINEERING SPECIALIZATION
+
+## Phase 10 — Data Warehouses
+
+Choose:
+
+* BigQuery OR Snowflake
+
+Topics:
+
+* Warehouse architecture
+* OLTP vs OLAP
+* Columnar storage
+* MPP
+* Schemas
+* Tables
+* Loading data
+* Querying data
+* Partitioning
+* Clustering
+* Cost optimization
+
+---
+
+# 10. PHASE 11 — DBT
+
+Priority: **5/5**
+
+Goal:
+
+> Learn the core Analytics Engineering tool.
+
+Topics:
+
+* dbt setup
+* Warehouse connection
+* Models
+* Views
+* Tables
+* ref
+* source
+* Dependencies
+* Staging
+* Intermediate
+* Marts
+* Tests
+* not_null
+* unique
+* relationships
+* accepted_values
+* Documentation
+* Jinja
+* Macros
+* Incremental models
+* Snapshots
+
+---
+
+# 11. PROJECT 3 — MODERN ANALYTICS ENGINEERING PROJECT
+
+Pipeline:
+
+> Raw Data
+> ↓
+> Warehouse
+> ↓
+> dbt
+> ↓
+> Staging
+> ↓
+> Intermediate
+> ↓
+> Marts
+> ↓
+> Tests
+> ↓
+> Documentation
+> ↓
+> Power BI
+
+Required deliverables:
+
+* Load raw data
+* Build dbt models
+* Add tests
+* Generate documentation
+* Create dashboard
+* Document architecture
+* Upload to GitHub
+
+This project must be treated as a major portfolio milestone. 
+
+---
+
+# 12. PHASE 12 — DATA QUALITY
+
+Topics:
+
+* Validation
+* Completeness
+* Accuracy
+* Consistency
+* Uniqueness
+* Freshness
+* Monitoring
+* Failures
+* Alerting
+* dbt tests
+* Great Expectations basics
+
+---
+
+# 13. PHASE 13 — GIT AND SOFTWARE ENGINEERING
+
+Topics:
+
+* Git basics
+* Branching
+* Merging
+* Conflict resolution
+* Pull requests
+* Code review
+* Meaningful commits
+* README
+* Architecture documentation
+
+---
+
+# 14. PHASE 14 — CI/CD
+
+Topics:
+
+* Automated testing
+* Pull-request validation
+* Deployment
+* Branch → test → deployment workflow
+
+---
+
+# 15. PHASE 15 — ORCHESTRATION
+
+Tool:
+
+> Apache Airflow
+
+Topics:
+
+* DAGs
+* Tasks
+* Operators
+* Dependencies
+* Scheduling
+* Retries
+* Failure handling
+* Batch processing
+* Pipeline monitoring
+
+Required pipeline:
+
+> Extract → Load → dbt → Tests → Update
+
+---
+
+# 16. STAGE D — PRODUCTION SKILLS
+
+## Phase 16 — BI and Semantic Layer
+
+Topics:
+
+* Connect Power BI to warehouse marts
+* Consistent metrics
+* Dashboards
+* Semantic layers
+* Single source of truth
+
+## Phase 17 — Business Thinking
+
+This is NOT a normal phase that should become “100% complete.”
+
+It is a continuous competency.
+
+Core loop:
+
+> Business Question
+> ↓
+> Data Requirement
+> ↓
+> Model
+> ↓
+> SQL
+> ↓
+> Metric
+> ↓
+> Insight
+
+The UI should therefore mark this as:
+
+**Continuous Practice**
+
+rather than a conventional completed phase.
+
+## Phase 18 — Communication
+
+Competencies:
+
+* Explain architecture
+* Explain models
+* Explain assumptions
+* Explain limitations
+* Explain findings
+* Communicate technical concepts to non-technical stakeholders
+
+## Phase 19 — AI Tool Fluency
+
+Use AI for:
+
+* SQL
+* Python
+* Debugging
+* Documentation
+* Tests
+* Errors
+
+Critical competency:
+
+> Verify generated code, calculations, assumptions, edge cases, and results.
+
+This must be represented as a **verification competency**, not simply “used AI.” 
+
+---
+
+# 17. PROJECT 4 — END-TO-END ANALYTICS PLATFORM
+
+Architecture:
+
+> API
+> ↓
+> Python
+> ↓
+> Warehouse
+> ↓
+> dbt
+> ↓
+> Tests
+> ↓
+> Documentation
+> ↓
+> Orchestration
+> ↓
+> Power BI
+
+Deliverables:
+
+* Extract
+* Process
+* Load
+* dbt staging
+* dbt intermediate
+* dbt marts
+* Tests
+* Documentation
+* Scheduling
+* Dashboard
+* Architecture diagram
+* Detailed README
+* GitHub repository
+
+Completion represents the final practical demonstration of the roadmap. 
+
+---
+
+# 18. CORE PRODUCT PRINCIPLE
+
+## DO NOT USE A SIMPLE CHECKBOX PROGRESS MODEL
+
+A checkbox answers:
+
+> “Did I mark this complete?”
+
+It does NOT answer:
+
+> “Can I actually do this?”
+
+Therefore every learning item needs a competency lifecycle.
+
+### Recommended states
+
+**Not Started**
+
+↓
+
+**Learning**
+
+↓
+
+**Practicing**
+
+↓
+
+**Demonstrated**
+
+↓
+
+**Validated**
+
+↓
+
+**Mastered**
+
+Optional:
+
+**Needs Review**
+
+This prevents false progress.
+
+---
+
+# 19. LEARNING ITEM DATA MODEL
+
+Every topic should support:
+
+### Identity
+
+* Phase
+* Topic
+* Subtopic
+* Priority
+* Goal
+* Dependency
+
+### Progress
+
+* Status
+* Completion %
+* Start date
+* Last studied
+* Target date
+* Estimated effort
+* Actual effort
+
+### Competency
+
+* Confidence score
+* Practice completed
+* Assessment completed
+* Real-world task completed
+* Evidence attached
+* Review status
+
+### Knowledge retention
+
+* Last review
+* Next review
+* Review count
+* Forgetting-risk indicator
+
+### Notes
+
+* Personal notes
+* Common mistakes
+* Key concepts
+* Questions
+* Resources
+* AI-generated explanation
+* Examples
+
+---
+
+# 20. MASTERY MODEL
+
+Do not calculate mastery using completion percentage alone.
+
+Recommended competency score:
+
+**Competency =**
+
+* Learning completion: 20%
+* Practice: 25%
+* Assessment: 20%
+* Real-world application: 25%
+* Confidence: 10%
+
+The exact weights should be configurable.
+
+A topic can therefore be:
+
+> 100% studied
+> 40% competency
+
+This is intentional.
+
+---
+
+# 21. DASHBOARD
+
+The dashboard is the application's most important screen.
+
+It should answer five questions within 5 seconds:
+
+1. Where am I?
+2. What have I completed?
+3. What am I currently learning?
+4. What should I do next?
+5. Am I becoming job-ready?
+
+---
+
+## Dashboard hierarchy
+
+### Header
+
+Left:
+
+**Learning OS**
+
+Subtitle:
+
+**Data Analyst → Analytics Engineer**
+
+Right:
+
+* Search
+* Notifications
+* Theme toggle
+* Settings
+* Profile
+
+---
+
+## HERO PROGRESS CARD
+
+Display:
+
+### Career Progress
+
+**Data Analyst → Analytics Engineer**
+
+Large progress visualization.
+
+Example:
+
+**47%**
+
+Below:
+
+> Strong Data Analyst
+
+Secondary information:
+
+* 9 / 19 phases
+* 2 / 4 projects
+* 1 milestone completed
+* Current phase: Data Modeling
+
+Do NOT use excessive circular progress indicators.
+
+Prefer a clean horizontal progression visualization.
+
+---
+
+# 22. CAREER JOURNEY
+
+Create a horizontal/vertical roadmap visualization:
+
+**Data Analyst Foundation**
+→
+**Project 1**
+→
+**Strong Data Analyst**
+→
+**Project 2**
+→
+**Analytics Engineering**
+→
+**Project 3**
+→
+**Production Skills**
+→
+**Project 4**
+→
+**Analytics Engineer**
+
+Completed stages:
+
+* strong visual confirmation
+
+Current:
+
+* prominent active state
+
+Future:
+
+* subdued
+
+Locked:
+
+* visually disabled but still readable
+
+Never make future content invisible.
+
+---
+
+# 23. “YOUR NEXT BEST ACTION”
+
+This is one of the most important components.
+
+Do not simply say:
+
+> Continue Phase 9.
+
+Instead calculate the best next action.
+
+Examples:
+
+### Continue Learning
+
+> Finish: Slowly Changing Dimensions — Type 2
+
+### Practice
+
+> Complete 3 SQL window-function problems
+
+### Review
+
+> Review hypothesis testing — retention due today
+
+### Build
+
+> Add data-quality tests to Project 3
+
+### Career
+
+> Apply to 3 Data Analyst roles
+
+The system should prioritize actions based on:
+
+1. Roadmap dependency
+2. Current phase
+3. Incomplete required item
+4. Upcoming milestone
+5. Review due date
+6. Project dependency
+7. Career readiness
+
+---
+
+# 24. PHASE CARDS
+
+Each phase card should show:
+
+**Phase 09**
+
+### Data Modeling
+
+Priority:
+
+★★★★★
+
+Goal:
+
+Understand how analytical data structures are designed.
+
+Progress:
+
+**72%**
+
+Status:
+
+**In Progress**
+
+Stats:
+
+* 8 / 11 topics
+* 4 validated
+* 2 need review
+* 1 project dependency
+
+CTA:
+
+**Continue**
+
+---
+
+# 25. PHASE DETAIL PAGE
+
+Layout:
+
+### Header
+
+Phase number
+
+Phase title
+
+Goal
+
+Priority
+
+Overall progress
+
+Estimated effort
+
+Status
+
+---
+
+### Navigation tabs
+
+**Overview | Curriculum | Practice | Evidence | Notes | Reviews**
+
+---
+
+## Curriculum
+
+Every topic appears as a row.
+
+Columns:
+
+* Status
+* Topic
+* Competency
+* Practice
+* Evidence
+* Review
+* More
+
+Avoid enormous dense tables on mobile.
+
+---
+
+# 26. TOPIC DETAIL DRAWER
+
+Clicking a topic opens a right-side drawer on desktop.
+
+Display:
+
+### Topic
+
+Slowly Changing Dimensions — Type 2
+
+### Goal
+
+Understand how historical dimensional changes are represented.
+
+### Status
+
+Practicing
+
+### Competency
+
+68%
+
+### Checklist
+
+* Understand concept
+* Follow example
+* Complete exercise
+* Build implementation
+* Explain without reference
+* Validate result
+
+### Evidence
+
+Attach:
+
+* GitHub link
+* Screenshot
+* Notebook
+* SQL file
+* Project reference
+* Personal note
+
+### Review
+
+Next review:
+
+**Sep 15**
+
+Buttons:
+
+* Mark reviewed
+* Needs review
+* Update confidence
+
+---
+
+# 27. PROJECT MANAGEMENT
+
+Projects must have their own workspace.
+
+Project page:
+
+### Project 3
+
+**Modern Analytics Engineering Project**
+
+Progress:
+
+**64%**
+
+---
+
+## Pipeline visualization
+
+Raw Data
+
+↓
+
+Warehouse
+
+↓
+
+dbt
+
+↓
+
+Staging
+
+↓
+
+Intermediate
+
+↓
+
+Marts
+
+↓
+
+Tests
+
+↓
+
+Documentation
+
+↓
+
+Power BI
+
+Each stage has:
+
+* status
+* completion
+* dependencies
+* deliverables
+* evidence
+
+---
+
+# 28. PROJECT DELIVERABLE MODEL
+
+Every deliverable should have:
+
+* Description
+* Acceptance criteria
+* Status
+* Due date
+* Evidence
+* GitHub URL
+* Notes
+* Related roadmap topics
+
+Example:
+
+### Build dbt tests
+
+Acceptance criteria:
+
+* not_null tests
+* unique tests
+* relationship tests
+* accepted values tests
+
+Evidence:
+
+GitHub repository
+
+Status:
+
+Validated
+
+This makes the tracker evidence-based rather than checkbox-based.
+
+---
+
+# 29. MILESTONE SYSTEM
+
+Milestones must behave like gates.
+
+## Milestone card
+
+### DATA ANALYST FOUNDATION
+
+Requirements:
+
+✓ Strong SQL
+✓ Excel fundamentals
+✓ Statistics fundamentals
+✓ Power BI fundamentals
+✓ Project 1 completed
+
+Result:
+
+### READY TO APPLY
+
+CTA:
+
+**Open Application Tracker**
+
+The milestone must show exactly which requirements are blocking completion.
+
+Never show:
+
+> 80% complete
+
+without explaining what remains.
+
+---
+
+# 30. CAREER APPLICATION TRACKER
+
+The roadmap explicitly says:
+
+> Do not wait to finish the roadmap before applying. 
+
+Therefore include a dedicated career module.
+
+Fields:
+
+* Company
+* Role
+* Location
+* Job URL
+* Date applied
+* Stage
+* Resume version
+* Skills matched
+* Missing skills
+* Interview status
+* Follow-up date
+* Notes
+* Outcome
+
+Stages:
+
+**Saved → Applied → Recruiter → Assessment → Interview → Offer → Rejected**
+
+Dashboard:
+
+* Applications this week
+* Response rate
+* Interviews
+* Offers
+* Skill gaps discovered
+
+---
+
+# 31. JOB-READINESS ENGINE
+
+The tracker should calculate readiness separately for:
+
+### Data Analyst
+
+### Strong Data Analyst
+
+### Analytics Engineer
+
+Do NOT use one generic “career progress” percentage.
+
+Example:
+
+**Data Analyst readiness — 86%**
+
+**Analytics Engineer readiness — 43%**
+
+This makes the career transition explicit.
+
+---
+
+# 32. SKILL MATRIX
+
+Create a dedicated skill matrix.
+
+Columns:
+
+| Skill | Learning | Practice | Evidence | Confidence | Status |
+| ----- | -------- | -------- | -------- | ---------- | ------ |
+
+Skills:
+
+* SQL
+* Excel
+* Statistics
+* Power BI
+* Python
+* Pandas
+* APIs
+* PostgreSQL
+* Data Modeling
+* Data Warehouse
+* dbt
+* Data Quality
+* Git
+* CI/CD
+* Airflow
+* BI
+* Documentation
+* Business Analysis
+* Communication
+* AI Tool Fluency
+
+This aligns with the roadmap's final skill checklist. 
+
+---
+
+# 33. CONTINUOUS SKILLS
+
+Business Thinking, Communication, and AI Tool Fluency must not behave like ordinary phases.
+
+They should have:
+
+### Practice Log
+
+Example:
+
+**Business Thinking Practice #12**
+
+Business question:
+
+> Why did conversion fall?
+
+Data requirement:
+
+> Customer funnel by acquisition source.
+
+Model:
+
+> Marketing → Customer → Order
+
+Metric:
+
+> Conversion rate
+
+Insight:
+
+> ...
+
+This turns abstract skills into demonstrable competency.
+
+---
+
+# 34. REVIEW SYSTEM
+
+Implement spaced-review functionality.
+
+Every completed topic can enter a review queue.
+
+Review states:
+
+* Due today
+* Upcoming
+* Overdue
+* Mastered
+* Needs reinforcement
+
+The UI should never punish the user for missing a review.
+
+Instead show:
+
+> 3 reviews overdue
+
+and provide:
+
+**Start Review Session**
+
+---
+
+# 35. STUDY SESSION
+
+A focused study mode should exist.
+
+Display only:
+
+* Current objective
+* Current topic
+* Timer
+* Notes
+* Practice
+* Completion
+* Confidence
+* Next action
+
+Remove distracting dashboard components.
+
+At session completion ask:
+
+### What happened?
+
+* Learned
+* Practiced
+* Built
+* Reviewed
+
+### Confidence
+
+1–5
+
+### Evidence
+
+Optional link/file
+
+### Next review
+
+Automatically suggested.
+
+---
+
+# 36. ANALYTICS
+
+Create a professional analytics page.
+
+Metrics:
+
+### Learning
+
+* Total learning hours
+* Weekly learning hours
+* Topics completed
+* Topics validated
+* Current streak
+
+### Competency
+
+* Average mastery
+* Weakest skills
+* Strongest skills
+* Skills needing review
+
+### Projects
+
+* Projects completed
+* Project completion
+* Portfolio coverage
+
+### Career
+
+* Applications
+* Interviews
+* Response rate
+* Skill gaps
+
+---
+
+# 37. DO NOT OVER-GAMIFY
+
+Avoid:
+
+* cartoon badges
+* childish trophies
+* excessive confetti
+* XP everywhere
+* meaningless streak pressure
+* fake achievements
+
+Professional rewards can exist, but they must communicate useful information.
+
+Good:
+
+> SQL competency validated
+
+Bad:
+
+> 🔥 SQL Ninja Level 7
+
+---
+
+# 38. DESIGN SYSTEM
+
+## Design philosophy
+
+**Minimal + dense enough for productivity + visually calm + highly structured.**
+
+Use:
+
+* generous whitespace
+* strong hierarchy
+* restrained borders
+* subtle elevation
+* clear typography
+* consistent spacing
+* professional data visualization
+
+Avoid:
+
+* gradients everywhere
+* excessive glassmorphism
+* huge rounded cards
+* excessive shadows
+* neon colors
+* decorative illustrations
+* unnecessary animations
+
+---
+
+# 39. TYPOGRAPHY
+
+Use a professional modern sans-serif.
+
+Recommended:
+
+* Inter
+* Geist
+* SF Pro-style system typography
+
+Hierarchy:
+
+### Display
+
+32–40px
+
+### Page title
+
+24–28px
+
+### Section heading
+
+18–20px
+
+### Body
+
+14–16px
+
+### Metadata
+
+12–13px
+
+Typography must remain readable in both themes.
+
+Never use light-gray text that becomes inaccessible.
+
+---
+
+# 40. ICONOGRAPHY
+
+Use one coherent premium icon family.
+
+Recommended:
+
+**Lucide**
+
+or another consistent professional outline icon library.
+
+Do not mix:
+
+* Material icons
+* Font Awesome
+* random SVGs
+* emoji
+* unrelated icon packs
+
+Icons must have semantic meaning.
+
+Examples:
+
+* Dashboard → LayoutDashboard
+* Roadmap → Route
+* Skills → Layers
+* Projects → FolderKanban
+* Career → Briefcase
+* Reviews → RotateCcw
+* Analytics → ChartNoAxesCombined
+* Settings → Settings
+* Search → Search
+* Add → Plus
+* Completed → Check
+* Warning → TriangleAlert
+* Lock → Lock
+
+Use icons primarily for recognition and actions, not decoration.
+
+---
+
+# 41. ICON RULES
+
+Every icon button must have:
+
+* tooltip
+* accessible label
+* visible hover state
+* keyboard focus state
+
+Never create an icon-only button where its meaning is ambiguous.
+
+Do NOT use emojis as core UI icons.
+
+---
+
+# 42. COLOR SYSTEM
+
+Use semantic tokens rather than hardcoded colors.
+
+Required semantic tokens:
+
+* background
+* surface
+* surface-elevated
+* text-primary
+* text-secondary
+* text-muted
+* border
+* accent
+* success
+* warning
+* danger
+* info
+* disabled
+
+The exact colors can be selected by the design system, but semantic roles must remain consistent.
+
+---
+
+# 43. LIGHT MODE
+
+Light mode must be genuinely designed rather than simply inverting dark mode.
+
+Use:
+
+* warm/neutral white background
+* slightly elevated surfaces
+* restrained borders
+* high text contrast
+* subtle status colors
+
+Avoid pure #FFFFFF everywhere if it creates excessive visual glare.
+
+---
+
+# 44. DARK MODE
+
+Dark mode must use:
+
+* dark neutral background
+* slightly lighter elevated surfaces
+* readable secondary text
+* restrained borders
+* semantic status colors adjusted for dark surfaces
+
+NEVER implement:
+
+> `filter: invert(...)`
+
+Dark mode must use dedicated design tokens.
+
+---
+
+# 45. THEME SWITCHING
+
+Theme options:
+
+* Light
+* Dark
+* System
+
+Requirements:
+
+* instant transition
+* no flash of incorrect theme
+* persisted preference
+* respects system preference
+* accessible toggle
+* all charts adapt
+* all modals adapt
+* all inputs adapt
+* all tooltips adapt
+* all empty states adapt
+
+---
+
+# 46. RESPONSIVE DESIGN
+
+Breakpoints:
+
+### Desktop
+
+Full sidebar + multi-column dashboard.
+
+### Tablet
+
+Collapsible navigation + adaptive cards.
+
+### Mobile
+
+Bottom navigation or compact drawer.
+
+Never simply shrink desktop UI.
+
+---
+
+# 47. MOBILE INFORMATION ARCHITECTURE
+
+Primary navigation:
+
+* Home
+* Roadmap
+* Projects
+* Skills
+* Career
+
+Secondary items:
+
+* Reviews
+* Analytics
+* Settings
+
+Use bottom navigation only for primary actions.
+
+---
+
+# 48. SIDEBAR
+
+Desktop sidebar:
+
+**Workspace**
+
+* Overview
+* Roadmap
+* Projects
+* Skills
+* Reviews
+* Career
+* Analytics
+
+**Career Stage**
+
+* Data Analyst
+* Strong Data Analyst
+* Analytics Engineer
+
+Bottom:
+
+* Settings
+* Help
+* Theme
+
+Sidebar can collapse.
+
+Collapsed state must preserve recognizable iconography and tooltips.
+
+---
+
+# 49. SEARCH
+
+Global search must search:
+
+* phases
+* topics
+* projects
+* skills
+* notes
+* resources
+* applications
+
+Keyboard shortcut:
+
+**⌘/Ctrl + K**
+
+Search results grouped by entity type.
+
+---
+
+# 50. FILTERING
+
+Roadmap filtering:
+
+* All
+* Not started
+* In progress
+* Completed
+* Validated
+* Needs review
+* Overdue
+
+Additional filters:
+
+* Phase
+* Priority
+* Skill
+* Project dependency
+* Career stage
+
+Filters must be combinable.
+
+---
+
+# 51. SORTING
+
+Allow sorting by:
+
+* Roadmap order
+* Progress
+* Priority
+* Recently updated
+* Review date
+* Target date
+
+Never destroy canonical roadmap order permanently.
+
+Provide:
+
+**Reset to roadmap order**
+
+---
+
+# 52. EMPTY STATES
+
+Every empty state needs:
+
+1. Explanation
+2. Clear next action
+3. Context
+
+Bad:
+
+> No data.
+
+Good:
+
+> No projects yet. Start Project 1 to turn your SQL and Power BI skills into portfolio evidence.
+
+CTA:
+
+**Start Project 1**
+
+---
+
+# 53. LOADING STATES
+
+Never show blank screens.
+
+Use:
+
+* skeleton loaders
+* content placeholders
+* predictable layout
+
+Avoid aggressive spinners for content that can use skeletons.
+
+---
+
+# 54. ERROR STATES
+
+Errors must explain:
+
+* what failed
+* what was affected
+* whether progress was saved
+* what the user can do
+
+Example:
+
+> We couldn't save your progress.
+
+> Your last saved progress is intact.
+
+Actions:
+
+**Retry**
+
+**Continue offline**
+
+Never display raw technical stack traces to the user.
+
+---
+
+# 55. OFFLINE / NETWORK FAILURE
+
+If applicable, implement resilient local state.
+
+When network fails:
+
+> You're offline. Changes will be saved locally and synchronized when connection returns.
+
+Do not silently lose progress.
+
+Conflict resolution must never overwrite user progress without warning.
+
+---
+
+# 56. AUTOSAVE
+
+Progress changes should autosave.
+
+Display subtle state:
+
+**Saved**
+
+**Saving…**
+
+**Offline**
+
+**Sync failed**
+
+Do not require users to press Save after every checkbox.
+
+---
+
+# 57. UNDO
+
+Destructive actions must support:
+
+**Undo**
+
+Examples:
+
+* Marking a project incomplete
+* Deleting notes
+* Removing evidence
+* Resetting progress
+
+For destructive permanent actions:
+
+Use confirmation modal.
+
+---
+
+# 58. PROGRESS CALCULATION
+
+Avoid misleading averages.
+
+For example:
+
+19 phases cannot simply contribute equally if their actual competencies and project dependencies differ.
+
+Use multiple metrics:
+
+### Roadmap Completion
+
+Percentage of roadmap requirements completed.
+
+### Competency
+
+Percentage of skills validated.
+
+### Career Readiness
+
+Percentage of requirements required for the selected role satisfied.
+
+### Portfolio Readiness
+
+Percentage of project deliverables completed.
+
+These four metrics should remain separate.
+
+---
+
+# 59. DEPENDENCY ENGINE
+
+The roadmap has natural dependencies.
+
+Examples:
+
+SQL →
+
+Data Modeling →
+
+Warehouse →
+
+dbt →
+
+Analytics Engineering.
+
+Python →
+
+Pandas →
+
+API pipeline →
+
+Production pipeline.
+
+The tracker should identify dependencies.
+
+If the user tries to skip ahead:
+
+> This topic has recommended prerequisites.
+
+Show:
+
+* prerequisite
+* current status
+* reason
+
+Do not hard-lock learning unless the dependency is genuinely required.
+
+The user should retain control.
+
+---
+
+# 60. SKIPPING TOPICS
+
+Users must be able to skip or mark a topic as already known.
+
+Option:
+
+**I already know this**
+
+Then ask:
+
+* Confidence
+* Evidence
+* Optional assessment
+
+If validated, mark:
+
+**Validated prior knowledge**
+
+Do not force unnecessary repetition.
+
+---
+
+# 61. EDITING ROADMAP
+
+The canonical roadmap must remain intact.
+
+Allow user customization without destroying source structure.
+
+Examples:
+
+* choose Excel instead of Google Sheets
+* choose BigQuery instead of Snowflake
+* choose a learning resource
+* add notes
+* add personal practice
+
+Never silently replace roadmap requirements.
+
+---
+
+# 62. RESOURCE MANAGEMENT
+
+Each topic may contain:
+
+* Documentation
+* Course
+* Video
+* Article
+* Book
+* Practice platform
+* GitHub repository
+* Personal note
+
+Resources should be optional.
+
+The tracker is NOT a content platform.
+
+Its purpose is progression management.
+
+---
+
+# 63. NOTES
+
+Support notes at:
+
+* phase level
+* topic level
+* project level
+* skill level
+
+Notes should have:
+
+* autosave
+* timestamps
+* search
+* markdown support if appropriate
+
+---
+
+# 64. EVIDENCE SYSTEM
+
+Evidence is critical.
+
+Supported evidence:
+
+* GitHub URL
+* project URL
+* dashboard URL
+* notebook
+* screenshot
+* document
+* repository
+* assessment result
+* personal explanation
+
+Every evidence item should have:
+
+* title
+* type
+* URL/file
+* date
+* related skill
+* related topic
+* verification status
+
+---
+
+# 65. PORTFOLIO COVERAGE
+
+Create:
+
+### Portfolio Coverage
+
+Show which skills are demonstrated by projects.
+
+Example:
+
+| Skill    | Project 1 | Project 2 | Project 3 | Project 4 |
+| -------- | --------: | --------: | --------: | --------: |
+| SQL      |         ✓ |         ✓ |         ✓ |         ✓ |
+| Power BI |         ✓ |         — |         ✓ |         ✓ |
+| Python   |         — |         ✓ |         — |         ✓ |
+| Pandas   |         — |         ✓ |         — |         ✓ |
+| dbt      |         — |         — |         ✓ |         ✓ |
+| Airflow  |         — |         — |         — |         ✓ |
+
+This makes portfolio gaps obvious.
+
+---
+
+# 66. ACCESSIBILITY
+
+Target:
+
+**WCAG 2.2 AA**
+
+Requirements:
+
+* keyboard navigation
+* visible focus indicators
+* semantic HTML
+* screen-reader labels
+* sufficient contrast
+* no color-only status
+* reduced-motion support
+* accessible dialogs
+* accessible dropdowns
+* accessible tables
+* accessible tooltips
+
+Example:
+
+Do not show only a green dot.
+
+Use:
+
+**✓ Validated**
+
+---
+
+# 67. INTERACTION DESIGN PRINCIPLES
+
+Follow:
+
+### Fitts's Law
+
+Important controls should have sufficiently large hit areas.
+
+### Hick's Law
+
+Do not present 20 competing actions.
+
+### Jakob's Law
+
+Use familiar interaction patterns.
+
+### Miller's Law
+
+Avoid overwhelming users with huge unstructured groups.
+
+### Gestalt principles
+
+Use:
+
+* proximity
+* similarity
+* hierarchy
+* containment
+
+### Doherty Threshold
+
+Keep interaction feedback fast.
+
+### Tesler's Law
+
+Do not push unavoidable complexity onto users.
+
+The tracker should automate calculations rather than making users manually manage them.
+
+---
+
+# 68. MOTION
+
+Animations should communicate state, not decorate.
+
+Use:
+
+* 150–250ms micro-interactions
+* subtle progress transitions
+* drawer transitions
+* modal transitions
+* completion feedback
+
+Avoid:
+
+* bouncing cards
+* excessive parallax
+* perpetual animation
+* flashy completion effects
+
+Support:
+
+**prefers-reduced-motion**
+
+---
+
+# 69. ACCESSIBLE STATUS SYSTEM
+
+Each status requires:
+
+* icon
+* text
+* optional color
+
+Example:
+
+○ Not Started
+
+◐ Learning
+
+◑ Practicing
+
+✓ Demonstrated
+
+✓ Validated
+
+↻ Needs Review
+
+---
+
+# 70. NOTIFICATIONS
+
+Useful notifications only.
+
+Examples:
+
+> 2 SQL reviews are due today.
+
+> Project 3 is blocked by missing warehouse setup.
+
+> You're eligible for Milestone 1.
+
+> Your Analytics Engineer readiness increased to 51%.
+
+Avoid meaningless:
+
+> Great job!
+
+---
+
+# 71. WEEKLY REVIEW
+
+Create an automatic weekly summary.
+
+Sections:
+
+### Completed
+
+Topics and deliverables.
+
+### Improved
+
+Competency increases.
+
+### Weak areas
+
+Skills with low validation.
+
+### Career
+
+Applications/interviews.
+
+### Next week
+
+Recommended priorities.
+
+---
+
+# 72. DAILY PLAN
+
+Generate a focused daily plan based on:
+
+* current phase
+* outstanding requirements
+* review queue
+* project deadlines
+* career goals
+
+Example:
+
+### Today's Plan
+
+1. Finish CTE practice
+2. Review joins
+3. Complete 2 business SQL problems
+4. Update Project 1 README
+5. Apply to 2 Data Analyst roles
+
+Maximum recommended daily actions:
+
+**3–5**
+
+Avoid creating an overwhelming task list.
+
+---
+
+# 73. “WHY THIS NEXT?” EXPLANATION
+
+Whenever the system recommends an action, allow:
+
+**Why?**
+
+Example:
+
+> You're currently learning Data Modeling.
+
+> SCD Type 2 is the next unfinished required concept and is a prerequisite for your Project 3 modeling work.
+
+This builds trust in the recommendation engine.
+
+---
+
+# 74. CAREER LOOP
+
+The tracker must visualize:
+
+> Learn → Build → Apply → Improve → Apply again
+
+This is explicitly the roadmap's operating rule. 
+
+The application tracker should therefore not be isolated from learning.
+
+If an interview reveals:
+
+> Weak SQL window functions
+
+The user should be able to create:
+
+**Skill Gap → SQL → Window Functions → Review**
+
+This creates a closed learning loop.
+
+---
+
+# 75. INTERVIEW FEEDBACK
+
+Add:
+
+### Interview Skill Gap
+
+Fields:
+
+* Interview
+* Skill
+* Problem encountered
+* Severity
+* Action
+* Review date
+
+Example:
+
+> SQL — Window Functions
+> Could not explain LAG vs LEAD confidently
+> High priority
+> Create review task
+
+---
+
+# 76. AI ASSISTANCE
+
+AI can assist with:
+
+* explaining topics
+* generating practice questions
+* reviewing notes
+* identifying skill gaps
+* summarizing weekly progress
+* creating study plans
+* analyzing job descriptions
+* mapping job requirements to roadmap skills
+
+But AI must NEVER silently modify progress.
+
+Any AI-generated action must require explicit user confirmation before changing roadmap state.
+
+---
+
+# 77. AI VERIFICATION
+
+The AI feature must explicitly remind users:
+
+> Verify generated code, calculations, assumptions, edge cases, and results.
+
+This is directly aligned with Phase 19. 
+
+---
+
+# 78. DATA INTEGRITY
+
+Never allow:
+
+* negative progress
+* progress > 100%
+* impossible milestone states
+* project completion without required deliverables
+* orphaned topics
+* duplicate phase IDs
+* duplicate project IDs
+* broken dependencies
+* accidental roadmap reordering
+
+Use validation at both:
+
+**UI layer + data layer**
+
+---
+
+# 79. EDGE CASES
+
+The implementation MUST explicitly handle:
+
+### User skips a phase
+
+Do not break progress calculation.
+
+### User completes phases out of order
+
+Allow it but preserve dependency warnings.
+
+### User changes Excel → Google Sheets
+
+Update only the selected tool branch.
+
+### User changes BigQuery → Snowflake
+
+Do not delete existing progress.
+
+### User deletes evidence
+
+Recalculate validation if evidence was required.
+
+### User resets progress
+
+Show impact before confirmation.
+
+### User returns after months
+
+Show stale reviews without punishing previous progress.
+
+### User completes project before learning every topic
+
+Allow it.
+
+### User has previous experience
+
+Allow competency validation without fake learning time.
+
+### User changes career target
+
+Recalculate career readiness without destroying historical progress.
+
+### Network failure
+
+Preserve unsynchronized changes.
+
+### Multiple tabs
+
+Prevent stale tab overwrites.
+
+### Browser refresh
+
+Never lose progress.
+
+### Mobile screen
+
+No horizontal overflow.
+
+### Long topic names
+
+Wrap correctly.
+
+### Very large notes
+
+Use virtualized/efficient rendering where required.
+
+### Empty database
+
+Display onboarding state.
+
+### Corrupted/missing record
+
+Fail gracefully and preserve other progress.
+
+---
+
+# 80. PERFORMANCE
+
+Target:
+
+* fast initial render
+* lazy-load heavy analytics
+* virtualize long lists
+* debounce search
+* optimize charts
+* avoid unnecessary re-renders
+* cache roadmap structure
+* optimistic progress updates where safe
+
+The dashboard should feel instant.
+
+---
+
+# 81. DATA ARCHITECTURE
+
+Core entities:
+
+### User
+
+* id
+* preferences
+* theme
+* career target
+
+### Stage
+
+* id
+* name
+* order
+
+### Phase
+
+* id
+* stage_id
+* number
+* name
+* goal
+* priority
+
+### Topic
+
+* id
+* phase_id
+* name
+* order
+* required
+* competency_weight
+
+### Progress
+
+* user_id
+* topic_id
+* status
+* completion
+* confidence
+* timestamps
+
+### Evidence
+
+* id
+* topic_id
+* project_id
+* type
+* URL/file
+* verification
+
+### Project
+
+* id
+* name
+* stage
+* description
+* status
+
+### Deliverable
+
+* project_id
+* name
+* acceptance_criteria
+* status
+
+### Skill
+
+* id
+* name
+* category
+
+### SkillEvidence
+
+* skill_id
+* evidence_id
+
+### Review
+
+* topic_id
+* due_date
+* status
+
+### Application
+
+* company
+* role
+* stage
+* dates
+* skill gaps
+
+---
+
+# 82. ONBOARDING
+
+Do not make onboarding long.
+
+Step 1:
+
+### Where are you starting?
+
+* Beginner
+* Some experience
+* Experienced
+
+Step 2:
+
+### Current skills
+
+Allow quick selection.
+
+Step 3:
+
+### Career target
+
+* Data Analyst
+* Analytics Engineer
+* Both
+
+Step 4:
+
+### Weekly learning capacity
+
+* <5 hours
+* 5–10
+* 10–15
+* 15–20
+* 20+
+
+Step 5:
+
+Generate:
+
+**Your Roadmap**
+
+Never modify the canonical roadmap itself.
+
+---
+
+# 83. ONBOARDING OUTPUT
+
+Example:
+
+> You are starting at Phase 1: SQL Foundations.
+
+> Recommended focus this week:
+> SQL basics → Filtering → Aggregations
+
+> Career milestone:
+> Data Analyst Foundation
+
+> First project:
+> E-commerce Sales Analysis
+
+CTA:
+
+**Start Phase 1**
+
+---
+
+# 84. FIRST-TIME DASHBOARD
+
+Do not dump every feature on a new user.
+
+Prioritize:
+
+1. Current stage
+2. Current phase
+3. Next action
+4. Roadmap
+5. Career target
+
+Advanced analytics can remain secondary.
+
+---
+
+# 85. MICROCOPY
+
+Use concise professional language.
+
+Good:
+
+> 3 topics remaining
+
+> 2 reviews due
+
+> Blocked by prerequisite
+
+> Evidence missing
+
+> Ready for validation
+
+Avoid:
+
+> You're crushing it! 🚀🔥
+
+Avoid motivational noise.
+
+---
+
+# 86. CONFIRMATION LANGUAGE
+
+Use precise language.
+
+Instead of:
+
+> Are you sure?
+
+Use:
+
+> Mark “SCD Type 2” as validated?
+
+Then explain:
+
+> This will count toward Phase 9 competency and Milestone 2 readiness.
+
+Buttons:
+
+**Cancel**
+
+**Validate**
+
+---
+
+# 87. SECURITY
+
+Protect:
+
+* user data
+* uploaded evidence
+* credentials
+* API tokens
+* private project links
+
+Never expose:
+
+* API keys
+* authentication tokens
+* private URLs
+* internal errors
+
+External URLs should be validated.
+
+---
+
+# 88. ACCESSIBILITY + KEYBOARD SHORTCUTS
+
+Recommended:
+
+**Ctrl/Cmd + K** — Search
+
+**G then H** — Home
+
+**G then R** — Roadmap
+
+**G then P** — Projects
+
+**G then S** — Skills
+
+**G then C** — Career
+
+**?** — Keyboard shortcuts
+
+Do not force keyboard shortcuts; all functionality must remain available through normal UI.
+
+---
+
+# 89. TESTING REQUIREMENTS
+
+Before release, test:
+
+## Functional
+
+* create progress
+* update progress
+* undo
+* reset
+* evidence
+* projects
+* milestones
+* reviews
+* applications
+* theme
+* filters
+* search
+
+## Responsive
+
+* 320px
+* 375px
+* 768px
+* 1024px
+* 1440px
+* 1920px
+
+## Browser
+
+* Chrome
+* Edge
+* Safari
+* Firefox
+
+## Accessibility
+
+* keyboard only
+* screen reader
+* zoom 200%
+* reduced motion
+* contrast
+
+## Data
+
+* empty state
+* large dataset
+* corrupted record
+* duplicate record
+* missing dependency
+
+---
+
+# 90. CRITICAL ACCEPTANCE TEST
+
+The product is NOT finished if a user can:
+
+> click every checkbox
+
+and reach:
+
+> 100% Analytics Engineer
+
+without demonstrating projects, competency, or required evidence.
+
+The system must distinguish:
+
+**Task completion**
+
+from:
+
+**Competency**
+
+from:
+
+**Career readiness**
+
+---
+
+# 91. FINAL CAREER PROGRESSION
+
+The UI must preserve the roadmap's final progression:
+
+**Phases 1–4**
+
+↓
+
+**Data Analyst Foundation**
+
+↓
+
+**Project 1**
+
+↓
+
+**Apply**
+
+↓
+
+**Phases 5–9**
+
+↓
+
+**Strong Data Analyst**
+
+↓
+
+**Project 2**
+
+↓
+
+**Phases 10–15**
+
+↓
+
+**Analytics Engineering**
+
+↓
+
+**Project 3**
+
+↓
+
+**Phases 16–19**
+
+↓
+
+**Production Skills**
+
+↓
+
+**Project 4**
+
+↓
+
+**Analytics Engineer**
+
+This is the canonical career journey and must be represented exactly. 
+
+---
+
+# 92. NON-NEGOTIABLE PRODUCT RULES
+
+1. Never replace the roadmap with a generic course structure.
+2. Never treat every phase as equally important.
+3. Never calculate career readiness using completion alone.
+4. Never hide prerequisites.
+5. Never force unnecessary prerequisites.
+6. Never lose user progress.
+7. Never silently overwrite user data.
+8. Never rely on color alone.
+9. Never make dark mode an inverted light mode.
+10. Never mix icon libraries.
+11. Never use emojis as primary UI icons.
+12. Never use excessive gamification.
+13. Never create giant information-dense tables on mobile.
+14. Never make important actions icon-only without accessible labels.
+15. Never show unexplained percentages.
+16. Never lock the user into the roadmap unnecessarily.
+17. Never allow AI to silently modify progress.
+18. Never mark competency as validated without evidence/assessment where required.
+19. Never force the learner to finish the entire roadmap before applying.
+20. Never allow visual polish to compromise usability.
+
+---
+
+# 93. SUCCESS METRICS
+
+The product should measure:
+
+### Learning
+
+* weekly active learning days
+* topics completed
+* topics validated
+* review completion
+
+### Competency
+
+* skill validation rate
+* evidence coverage
+* weak-skill reduction
+
+### Portfolio
+
+* project completion
+* deliverable completion
+* skill/project coverage
+
+### Career
+
+* applications
+* interviews
+* response rate
+* offers
+* interview-derived skill gaps
+
+### Product usability
+
+* time to find next action
+* task completion rate
+* error rate
+* failed save rate
+* mobile usability
+* accessibility issues
+
+---
+
+# 94. DEFINITION OF DONE
+
+The product is production-ready only when:
+
+### Roadmap
+
+* All 19 phases represented
+* All roadmap topics represented
+* All four projects represented
+* Both milestones represented
+* Final career progression represented
+
+### Learning
+
+* Topic-level progress
+* Competency tracking
+* Evidence
+* Reviews
+* Notes
+* Dependencies
+
+### Career
+
+* Data Analyst readiness
+* Strong Data Analyst readiness
+* Analytics Engineer readiness
+* Application tracker
+* Interview skill-gap loop
+
+### Projects
+
+* Deliverables
+* Acceptance criteria
+* Pipeline visualization
+* Evidence
+* Portfolio coverage
+
+### UX
+
+* Responsive
+* Accessible
+* Keyboard navigable
+* Light mode
+* Dark mode
+* System theme
+* Loading states
+* Empty states
+* Error states
+* Offline handling
+* Undo
+* Autosave
+
+### Engineering
+
+* No duplicate records
+* No impossible progress states
+* No stale-state overwrites
+* No data loss
+* Validated dependencies
+* Tested calculations
+* Tested responsive layouts
+* Tested accessibility
+
+---
+
+# 95. FINAL DESIGN DIRECTION
+
+The finished product should visually communicate:
+
+> **“This is the control center for becoming an Analytics Engineer.”**
+
+Not:
+
+> “This is a checklist for watching courses.”
+
+The learner should open the dashboard and immediately understand:
+
+**Where I am → What I know → What I can prove → What I should do next → What I need for the next career milestone.**
+
+The entire experience should be structured around the roadmap's central philosophy:
+
+> **Learn → Build → Apply → Improve → Apply again.**
+
+The application should therefore function simultaneously as:
+
+**Learning Tracker + Competency Matrix + Portfolio Manager + Project Tracker + Review System + Career Readiness Dashboard + Job Application Tracker.**
+
+That is the product.
+
+The critical architectural decision here is the separation of **progress, competency, evidence, and career readiness**. If the AI builder collapses those into one percentage, the resulting product will look polished but will be fundamentally useless.
+
+The roadmap itself already gives you the career architecture; the tracker should add the **measurement and execution layer** without rewriting that architecture. 
