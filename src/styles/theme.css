@@ -24,6 +24,7 @@
   --sidebar-width: 260px;
   --sidebar-collapsed-width: 68px;
   --header-height: 60px;
+  --bottom-nav-height: 60px;
 }
 
 /* Dark Theme (Default on :root & data-theme='dark' - Developer Tool aesthetic like Linear/GitHub) */

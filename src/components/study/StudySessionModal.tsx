@@ -205,7 +205,7 @@ export const StudySessionModal: React.FC = () => {
       onClick={minimizeStudySession}
     >
       <div
-        className="card"
+        className="card study-session-modal-card"
         onClick={e => e.stopPropagation()}
         style={{
           width: '100%',

@@ -12,7 +12,7 @@ export class DashboardPage {
     await expect(this.page.locator('text=Roadmap Done')).toBeVisible()
     await expect(this.page.locator('text=Skill Mastery')).toBeVisible()
     await expect(this.page.locator('text=Projects Built')).toBeVisible()
-    await expect(this.page.locator('text=Job Readiness')).toBeVisible()
+    await expect(this.page.locator('text="4. Job Readiness"')).toBeVisible()
   }
 
   async toggleRecommendedActionWhy() {

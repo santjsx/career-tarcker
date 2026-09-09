@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Search, Sun, Moon, Laptop, Bell, Play, CheckCircle2, Cloud, Keyboard, HelpCircle, RefreshCcw, AlertTriangle } from 'lucide-react'
+import { Search, Sun, Moon, Laptop, Bell, Play, CheckCircle2, Cloud, Keyboard, HelpCircle, RefreshCcw, AlertTriangle, Menu } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import { DateCalendarWidget } from './DateCalendarWidget'
 
@@ -12,7 +12,8 @@ export const Header: React.FC = () => {
     startStudySession,
     setIsStudyModalOpen,
     saveStatus,
-    setActiveView
+    setActiveView,
+    setIsMobileNavOpen
   } = useApp()
 
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false)
@@ -31,34 +32,31 @@ export const Header: React.FC = () => {
   }
 
   return (
-    <header
-      style={{
-        height: 'var(--header-height)',
-        backgroundColor: 'var(--bg-surface)',
-        borderBottom: '1px solid var(--border-subtle)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 1.5rem',
-        position: 'sticky',
-        top: 0,
-        zIndex: 900,
-        gap: '1rem'
-      }}
-    >
+    <header className="header">
       {/* Left: Brand & Autosave */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: '290px', flexShrink: 0 }}>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <span style={{ fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
+      <div className="header-left-section">
+        {/* Mobile Hamburger Button */}
+        <button
+          type="button"
+          onClick={() => setIsMobileNavOpen(true)}
+          className="mobile-hamburger-btn"
+          aria-label="Open navigation menu"
+        >
+          <Menu size={20} />
+        </button>
+
+        <div className="header-brand-info">
+          <span className="header-brand-title">
             Career Tracker
           </span>
-          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+          <span className="header-brand-subtitle">
             Data Analyst → Analytics Engineer
           </span>
         </div>
 
         {/* Save Indicator with Rigid Lock (Zero Layout Shift - CLS = 0) */}
         <div
+          className="header-save-indicator"
           data-testid="save-status-indicator"
           aria-label={saveStatus === 'saved' ? 'Saved to LocalStorage' : saveStatus === 'saving' ? 'Saving...' : 'Offline'}
           title={
@@ -134,23 +132,25 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Center: Professional Date, Calendar & Year Horizon Widget */}
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="header-center-section">
         <DateCalendarWidget />
       </div>
 
       {/* Right: Actions */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+      <div className="header-right-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         {/* Cmd+K Search trigger */}
         <button
           type="button"
           onClick={() => setIsSearchOpen(true)}
-          className="btn btn-secondary btn-sm"
+          className="btn btn-secondary btn-sm header-search-btn"
           style={{ gap: '0.65rem', padding: '0.35rem 0.75rem' }}
           title="Search anything (Cmd+K)"
+          aria-label="Search"
         >
           <Search size={14} style={{ color: 'var(--text-muted)' }} />
-          <span style={{ color: 'var(--text-secondary)' }}>Search...</span>
+          <span className="header-search-label" style={{ color: 'var(--text-secondary)' }}>Search...</span>
           <kbd
+            className="header-search-kbd"
             style={{
               fontSize: '0.65rem',
               backgroundColor: 'var(--bg-surface)',
@@ -239,7 +239,7 @@ export const Header: React.FC = () => {
               style={{ gap: '0.4rem' }}
             >
               <Play size={13} fill="currentColor" />
-              <span>Study Mode</span>
+              <span className="header-study-label">Study Mode</span>
             </button>
           )
         })()}

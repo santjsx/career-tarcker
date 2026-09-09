@@ -7,6 +7,8 @@ import { KeyboardShortcutsModal } from './components/layout/KeyboardShortcutsMod
 import { TopicDrawer } from './components/roadmap/TopicDrawer'
 import { StudySessionModal } from './components/study/StudySessionModal'
 import { FloatingStudyPill } from './components/study/FloatingStudyPill'
+import { MobileBottomNav } from './components/layout/MobileBottomNav'
+import { MobileNavDrawer } from './components/layout/MobileNavDrawer'
 
 // Views
 import { HeroProgressCard } from './components/dashboard/HeroProgressCard'
@@ -92,6 +94,10 @@ export const AppContent: React.FC = () => {
       <KeyboardShortcutsModal />
       <StudySessionModal />
       <FloatingStudyPill />
+
+      {/* Mobile Responsive Navigation Shell */}
+      <MobileBottomNav />
+      <MobileNavDrawer />
     </div>
   )
 }

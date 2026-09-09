@@ -12,7 +12,7 @@ import {
   Skill,
   CurrentStudySession
 } from '../types'
-import { getInitialState, CANONICAL_PHASES } from '../data/canonicalRoadmap'
+import { getInitialState, getCleanInitialState, getSampleDemoState, CANONICAL_PHASES } from '../data/canonicalRoadmap'
 import { calculateTopicCompetency } from '../services/competencyEngine'
 
 const STORAGE_KEY = 'learning_os_career_tracker_v1'
@@ -33,6 +33,8 @@ export interface AppContextType {
   setIsStudyModalOpen: (open: boolean) => void
   isShortcutsOpen: boolean
   setIsShortcutsOpen: (open: boolean) => void
+  isMobileNavOpen: boolean
+  setIsMobileNavOpen: (open: boolean) => void
   saveStatus: 'saved' | 'saving' | 'offline'
 
   // Mutators
@@ -152,6 +154,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false)
   const [isStudyModalOpen, setIsStudyModalOpen] = useState<boolean>(false)
   const [isShortcutsOpen, setIsShortcutsOpen] = useState<boolean>(false)
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false)
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'offline'>('saved')
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const toastTimerRef = React.useRef<any>(null)
@@ -771,57 +774,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [])
 
   const resetToCleanSlate = useCallback(() => {
-    const cleanTopics: Record<string, Topic> = {}
-    const initial = getInitialState()
-    Object.keys(initial.topics).forEach(key => {
-      const t = initial.topics[key]
-      cleanTopics[key] = {
-        ...t,
-        status: 'not-started',
-        competencyBreakdown: { learning: 0, practice: 0, assessment: 0, realWorld: 0, confidence: 0 },
-        checklist: {
-          understandConcept: false,
-          followExample: false,
-          completeExercise: false,
-          buildImplementation: false,
-          explainWithoutReference: false,
-          validateResult: false
-        },
-        evidence: [],
-        notes: '',
-        reviewCount: 0,
-        needsReview: false
-      }
-    })
-
-    const cleanProjects = initial.projects.map(p => ({
-      ...p,
-      status: 'not-started' as const,
-      deliverables: p.deliverables.map(d => ({ ...d, completed: false, status: 'pending' as const, evidenceUrl: undefined })),
-      pipeline: p.pipeline.map(s => ({ ...s, status: 'pending' as const }))
-    }))
-
-    const cleanSkills: Skill[] = initial.skills.map(s => ({
-      ...s,
-      learningScore: 0,
-      practiceScore: 0,
-      evidenceCount: 0,
-      confidence: 1,
-      status: 'Novice' as const
-    }))
-
-    const cleanState: AppState = {
-      ...initial,
-      topics: cleanTopics,
-      projects: cleanProjects,
-      skills: cleanSkills,
-      applications: [],
-      interviewGaps: [],
-      continuousLogs: [],
-      studyLogs: [],
-      currentStudySession: { isActive: false, elapsedSeconds: 0 }
-    }
-
+    const cleanState = getCleanInitialState()
     stateRef.current = cleanState
     safeLocalStorageSet(STORAGE_KEY, cleanState)
     setState(cleanState)
@@ -830,7 +783,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [showToast])
 
   const resetToSampleState = useCallback(() => {
-    const sampleState = getInitialState()
+    const sampleState = getSampleDemoState()
     stateRef.current = sampleState
     safeLocalStorageSet(STORAGE_KEY, sampleState)
     setState(sampleState)
@@ -892,6 +845,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setIsStudyModalOpen,
         isShortcutsOpen,
         setIsShortcutsOpen,
+        isMobileNavOpen,
+        setIsMobileNavOpen,
         saveStatus,
 
         updateTopic,

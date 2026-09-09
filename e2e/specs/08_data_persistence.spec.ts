@@ -83,7 +83,12 @@ test.describe('Data Persistence Controls (Backup, Restore, Clean Slate, Load Sam
   })
 
   test('Restore should successfully import saved state from a JSON backup file', async ({ page }) => {
-    // 1. Download clean backup to get valid JSON state
+    // 1. Populate sample data to have state to back up
+    await page.locator('aside.sidebar button', { hasText: 'Load Sample' }).click()
+    await page.locator('#confirm-load-sample-btn').click()
+    await expect(page.locator('text=22 of 70 topics completed')).toBeVisible()
+
+    // 2. Download sample backup to get valid JSON state
     const backupBtn = page.locator('aside.sidebar button', { hasText: 'Backup' })
     const downloadPromise = page.waitForEvent('download')
     await backupBtn.click()

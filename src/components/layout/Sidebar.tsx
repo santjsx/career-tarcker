@@ -77,23 +77,7 @@ export const Sidebar: React.FC = () => {
   }
 
   return (
-    <aside
-      className="sidebar"
-      style={{
-        width: 'var(--sidebar-width)',
-        backgroundColor: 'var(--bg-sidebar)',
-        borderRight: '1px solid var(--border-subtle)',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        zIndex: 950,
-        flexShrink: 0
-      }}
-    >
+    <aside className="sidebar">
       {/* Brand Header */}
       <div
         style={{

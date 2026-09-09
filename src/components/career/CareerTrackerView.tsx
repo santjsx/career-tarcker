@@ -352,6 +352,44 @@ export const CareerTrackerView: React.FC = () => {
           <span className="badge badge-accent">{state.applications.length} Jobs</span>
         </div>
 
+        {state.applications.length === 0 && (
+          <div
+            style={{
+              padding: '1.5rem 1rem',
+              backgroundColor: 'var(--bg-app)',
+              borderRadius: 'var(--radius-md)',
+              border: '1px dashed var(--border-default)',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.75rem',
+              marginBottom: '1.25rem'
+            }}
+          >
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'var(--accent-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Briefcase size={20} style={{ color: 'var(--accent-primary)' }} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: '0.9375rem', color: 'var(--text-primary)' }}>
+                No job applications tracked yet
+              </div>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', maxWidth: '420px', margin: '0.25rem auto 0 auto' }}>
+                When you start applying for analytics roles, log each application here to manage interviews, track take-homes, and close skill gaps.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowAppModal(true)}
+              className="btn btn-primary btn-sm"
+              style={{ gap: '0.4rem' }}
+            >
+              <Plus size={14} />
+              <span>Track Your First Job</span>
+            </button>
+          </div>
+        )}
+
         {/* Pipeline columns */}
         <div
           style={{

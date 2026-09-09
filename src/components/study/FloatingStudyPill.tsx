@@ -55,7 +55,7 @@ export const FloatingStudyPill: React.FC = () => {
 
   return (
     <div
-      className="card"
+      className="card floating-study-pill"
       style={{
         position: 'fixed',
         bottom: '1.5rem',

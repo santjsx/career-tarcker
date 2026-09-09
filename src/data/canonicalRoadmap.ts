@@ -680,7 +680,84 @@ export const CANONICAL_CONTINUOUS_LOGS: ContinuousPracticeLog[] = [
   }
 ]
 
-export function getInitialState(): AppState {
+export function generateCleanTopics(): Record<string, Topic> {
+  const sampleTopics = generateSeedTopics()
+  const cleanTopics: Record<string, Topic> = {}
+  Object.keys(sampleTopics).forEach(key => {
+    const t = sampleTopics[key]
+    cleanTopics[key] = {
+      ...t,
+      status: 'not-started',
+      competencyBreakdown: { learning: 0, practice: 0, assessment: 0, realWorld: 0, confidence: 0 },
+      checklist: {
+        understandConcept: false,
+        followExample: false,
+        completeExercise: false,
+        buildImplementation: false,
+        explainWithoutReference: false,
+        validateResult: false
+      },
+      evidence: [],
+      notes: '',
+      reviewCount: 0,
+      needsReview: false
+    }
+  })
+  return cleanTopics
+}
+
+export function getCleanProjects(): Project[] {
+  return CANONICAL_PROJECTS.map(p => ({
+    ...p,
+    status: 'not-started' as const,
+    deliverables: p.deliverables.map(d => ({
+      ...d,
+      completed: false,
+      status: 'pending' as const,
+      evidenceUrl: undefined
+    })),
+    pipeline: p.pipeline.map(s => ({
+      ...s,
+      status: 'pending' as const
+    }))
+  }))
+}
+
+export function getCleanSkills(): Skill[] {
+  return CANONICAL_SKILLS.map(s => ({
+    ...s,
+    learningScore: 0,
+    practiceScore: 0,
+    evidenceCount: 0,
+    confidence: 1,
+    status: 'Novice' as const
+  }))
+}
+
+export function getCleanInitialState(): AppState {
+  return {
+    user: {
+      theme: 'dark',
+      careerTarget: 'Both',
+      weeklyHoursCapacity: 12,
+      currentStage: 'stage-a'
+    },
+    phases: CANONICAL_PHASES,
+    topics: generateCleanTopics(),
+    projects: getCleanProjects(),
+    skills: getCleanSkills(),
+    applications: [],
+    interviewGaps: [],
+    continuousLogs: [],
+    studyLogs: [],
+    currentStudySession: {
+      isActive: false,
+      elapsedSeconds: 0
+    }
+  }
+}
+
+export function getSampleDemoState(): AppState {
   return {
     user: {
       theme: 'dark',
@@ -713,3 +790,8 @@ export function getInitialState(): AppState {
     }
   }
 }
+
+export function getInitialState(): AppState {
+  return getCleanInitialState()
+}
+
