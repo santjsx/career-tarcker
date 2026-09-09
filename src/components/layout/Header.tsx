@@ -143,7 +143,7 @@ export const Header: React.FC = () => {
           type="button"
           onClick={() => setIsSearchOpen(true)}
           className="btn btn-secondary btn-sm header-search-btn"
-          style={{ gap: '0.65rem', padding: '0.35rem 0.75rem' }}
+          style={{ gap: '0.65rem', padding: '0.35rem 0.75rem', flexShrink: 0 }}
           title="Search anything (Cmd+K)"
           aria-label="Search"
         >
@@ -176,7 +176,7 @@ export const Header: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsStudyModalOpen(true)}
-                className="btn btn-sm"
+                className="btn btn-sm header-study-btn"
                 title={isRunning ? 'Active study session in progress (click to view)' : 'Study session paused (click to resume)'}
                 style={{
                   display: 'inline-flex',
@@ -193,7 +193,8 @@ export const Header: React.FC = () => {
                     ? '0 0 14px rgba(52, 211, 153, 0.18)'
                     : '0 0 14px rgba(251, 191, 36, 0.15)',
                   cursor: 'pointer',
-                  transition: 'all 160ms ease'
+                  transition: 'all 160ms ease',
+                  flexShrink: 0
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.backgroundColor = isRunning
@@ -234,9 +235,9 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={() => startStudySession(state.currentStudySession.topicId || 't-1-9')}
-              className="btn btn-primary btn-sm"
+              className="btn btn-primary btn-sm header-study-btn"
               title="Open study timer"
-              style={{ gap: '0.4rem' }}
+              style={{ gap: '0.4rem', flexShrink: 0 }}
             >
               <Play size={13} fill="currentColor" />
               <span className="header-study-label">Study Mode</span>
@@ -245,12 +246,12 @@ export const Header: React.FC = () => {
         })()}
 
         {/* Notifications Popover */}
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative', flexShrink: 0 }}>
           <button
             type="button"
             onClick={() => setIsNotificationsOpen(prev => !prev)}
             className="btn btn-ghost btn-sm"
-            style={{ position: 'relative', padding: '0.45rem' }}
+            style={{ position: 'relative', padding: '0.45rem', flexShrink: 0 }}
             aria-label="Notifications"
           >
             <Bell size={16} />
@@ -366,8 +367,8 @@ export const Header: React.FC = () => {
         <button
           type="button"
           onClick={() => setIsShortcutsOpen(true)}
-          className="btn btn-ghost btn-sm"
-          style={{ padding: '0.45rem' }}
+          className="btn btn-ghost btn-sm header-shortcuts-btn"
+          style={{ padding: '0.45rem', flexShrink: 0 }}
           title="Keyboard shortcuts (?)"
         >
           <Keyboard size={16} />
@@ -378,7 +379,7 @@ export const Header: React.FC = () => {
           type="button"
           onClick={cycleTheme}
           className="btn btn-ghost btn-sm"
-          style={{ padding: '0.45rem', transition: 'transform 180ms var(--ease-spring)' }}
+          style={{ padding: '0.45rem', transition: 'transform 180ms var(--ease-spring)', flexShrink: 0 }}
           onMouseEnter={e => {
             e.currentTarget.style.transform = 'rotate(15deg) scale(1.05)'
           }}

@@ -126,4 +126,37 @@ test.describe('Mobile Responsiveness, Thumb Navigation, and Clean Initial State'
       expect(isOverflowing).toBeFalsy()
     }
   })
+
+  test('should keep mobile header fixed at top: 0 during mobile scroll and display all controls at 502px', async ({ page }) => {
+    // Set 502px compact viewport (reported in screenshot)
+    await page.setViewportSize({ width: 502, height: 750 })
+    await page.goto('/')
+
+    const header = page.locator('header.header')
+    await expect(header).toBeVisible()
+    await expect(header).toHaveCSS('position', 'fixed')
+
+    // Verify all core header controls fit and are visible without clipping
+    await expect(page.locator('.mobile-hamburger-btn')).toBeVisible()
+    await expect(page.locator('header .header-brand-title')).toBeVisible()
+    await expect(page.locator('[data-testid="save-status-indicator"]')).toBeVisible()
+    await expect(page.locator('.header-search-btn')).toBeVisible()
+    await expect(page.locator('.header-study-btn')).toBeVisible()
+    await expect(page.locator('header button[aria-label="Notifications"]')).toBeVisible()
+    await expect(page.locator('header button[title*="Theme"]').first()).toBeVisible()
+
+    // Scroll down 400px
+    await page.evaluate(() => window.scrollTo(0, 400))
+    await page.waitForTimeout(200)
+
+    const box = await header.boundingBox()
+    expect(box).not.toBeNull()
+    expect(box!.y).toBe(0)
+
+    // Zero horizontal overflow at 502px
+    const isOverflowing = await page.evaluate(() => {
+      return document.documentElement.scrollWidth > window.innerWidth
+    })
+    expect(isOverflowing).toBeFalsy()
+  })
 })

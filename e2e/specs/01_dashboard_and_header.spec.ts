@@ -103,6 +103,21 @@ test.describe('Dashboard, Header, and Fixed Navigation', () => {
     expect(box!.y).toBe(0)
   })
 
+  test('should keep header permanently fixed during scroll', async ({ page }) => {
+    const header = page.locator('header.header')
+    await expect(header).toBeVisible()
+    await expect(header).toHaveCSS('position', 'fixed')
+
+    // Scroll window down 600px
+    await page.evaluate(() => window.scrollTo(0, 600))
+    await page.waitForTimeout(200)
+
+    // Verify header remains stationary at top: 0
+    const box = await header.boundingBox()
+    expect(box).not.toBeNull()
+    expect(box!.y).toBe(0)
+  })
+
   test('should display progress cards, Next Best Action, and why explanation', async () => {
     // Verify 4 key progress metrics
     await dashboard.verifyProgressMetrics()
