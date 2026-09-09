@@ -54,7 +54,7 @@ test.describe('Study Timer Modal and Stats & Review Analytics', () => {
     await starBtn.click()
 
     // 6. Complete and save
-    const finishBtn = modal.locator('button', { hasText: 'Finish & Save Time' })
+    const finishBtn = modal.locator('button', { hasText: 'Finish & Save' })
     await finishBtn.click()
     await expect(modal).not.toBeVisible()
 
@@ -78,8 +78,8 @@ test.describe('Study Timer Modal and Stats & Review Analytics', () => {
     await modal.locator('button', { hasText: 'Start' }).click()
     await page.waitForTimeout(600)
 
-    // 3. Click Minimize to background
-    const minimizeBtn = modal.locator('button', { hasText: 'Minimize to background' })
+    // 3. Click Minimize
+    const minimizeBtn = modal.locator('button', { hasText: 'Minimize' }).first()
     await minimizeBtn.click()
     await expect(modal).not.toBeVisible()
 

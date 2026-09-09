@@ -212,6 +212,8 @@ export const StudySessionModal: React.FC = () => {
           maxWidth: '520px',
           maxHeight: '92vh',
           overflowY: 'auto',
+          overflowX: 'hidden',
+          boxSizing: 'border-box',
           backgroundColor: 'var(--bg-surface-elevated)',
           border: '1px solid var(--border-default)',
           borderRadius: 'var(--radius-xl)',
@@ -559,18 +561,39 @@ export const StudySessionModal: React.FC = () => {
         </div>
 
         {/* Action Controls */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.1rem' }}>
+        <div
+          className="study-modal-footer"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: '0.6rem',
+            flexWrap: 'wrap',
+            marginTop: '0.2rem',
+            width: '100%',
+            boxSizing: 'border-box'
+          }}
+        >
           <button
             type="button"
             onClick={minimizeStudySession}
             className="btn btn-ghost btn-sm"
-            style={{ color: 'var(--text-muted)', fontSize: '0.72rem', padding: '0.35rem 0.5rem' }}
+            style={{
+              color: 'var(--text-muted)',
+              fontSize: '0.75rem',
+              padding: '0.35rem 0.55rem',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              flexShrink: 0
+            }}
             title="Keep timer running while browsing app"
           >
-            Minimize to background
+            <Minimize2 size={13} />
+            <span>Minimize</span>
           </button>
 
-          <div style={{ display: 'flex', gap: '0.6rem' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexShrink: 0 }}>
             <button
               type="button"
               onClick={handleCancelWithCheck}
@@ -582,10 +605,10 @@ export const StudySessionModal: React.FC = () => {
               type="button"
               onClick={handleFinish}
               className="btn btn-primary btn-sm"
-              style={{ gap: '0.35rem' }}
+              style={{ gap: '0.35rem', whiteSpace: 'nowrap' }}
             >
               <CheckCircle2 size={15} />
-              <span>Finish & Save Time</span>
+              <span>Finish & Save</span>
             </button>
           </div>
         </div>
