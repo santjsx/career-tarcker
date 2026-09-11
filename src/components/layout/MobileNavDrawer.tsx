@@ -12,7 +12,8 @@ import {
   RefreshCcw,
   RotateCcw,
   AlertTriangle,
-  Target
+  Target,
+  Calendar as CalendarIcon
 } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 
@@ -31,7 +32,8 @@ export const MobileNavDrawer: React.FC = () => {
     showToast,
     roadmapStageFilter,
     setRoadmapStageFilter,
-    navigateToStage
+    navigateToStage,
+    setIsCalendarOpen
   } = useApp()
 
   const [confirmModal, setConfirmModal] = useState<'clean' | 'sample' | null>(null)
@@ -180,6 +182,27 @@ export const MobileNavDrawer: React.FC = () => {
                 </button>
               )
             })}
+
+            {/* Direct Calendar Trigger */}
+            <button
+              type="button"
+              data-testid="mobile-drawer-calendar-btn"
+              onClick={() => {
+                setIsMobileNavOpen(false)
+                setIsCalendarOpen(true)
+              }}
+              className="mobile-nav-link"
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <CalendarIcon size={18} style={{ color: 'var(--accent-primary)' }} />
+                <span style={{ fontSize: '0.9375rem', fontWeight: 500, color: 'var(--text-secondary)' }}>
+                  Calendar & Horizon
+                </span>
+              </div>
+              <span className="badge badge-accent" style={{ fontSize: '0.7rem' }}>
+                Calendar
+              </span>
+            </button>
           </div>
 
           <hr style={{ border: 'none', borderTop: '1px solid var(--border-subtle)', margin: '0.5rem 0' }} />

@@ -36,6 +36,8 @@ export interface AppContextType {
   setIsStudyModalOpen: (open: boolean) => void
   isShortcutsOpen: boolean
   setIsShortcutsOpen: (open: boolean) => void
+  isCalendarOpen: boolean
+  setIsCalendarOpen: (open: boolean) => void
   isMobileNavOpen: boolean
   setIsMobileNavOpen: (open: boolean) => void
   saveStatus: 'saved' | 'saving' | 'offline'
@@ -43,6 +45,8 @@ export interface AppContextType {
   // Mutators
   updateTopic: (topicId: string, updates: Partial<Topic>) => void
   validateTopic: (topicId: string) => void
+  toggleTopicComplete: (topicId: string) => void
+  markPhaseComplete: (phaseId: number) => void
   markTopicPriorKnown: (topicId: string, confidence?: number) => void
   updateChecklistItem: (topicId: string, itemKey: keyof Topic['checklist'], checked: boolean) => void
   updateTopicBreakdown: (topicId: string, key: keyof Topic['competencyBreakdown'], value: number) => void
@@ -169,6 +173,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false)
   const [isStudyModalOpen, setIsStudyModalOpen] = useState<boolean>(false)
   const [isShortcutsOpen, setIsShortcutsOpen] = useState<boolean>(false)
+  const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false)
   const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false)
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'offline'>('saved')
   const [toastMessage, setToastMessage] = useState<string | null>(null)
@@ -327,11 +332,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         status: 'validated',
         lastStudied: new Date().toISOString(),
         needsReview: false,
+        checklist: {
+          understandConcept: true,
+          followExample: true,
+          completeExercise: true,
+          buildImplementation: true,
+          explainWithoutReference: true,
+          validateResult: true
+        },
         competencyBreakdown: {
-          ...topic.competencyBreakdown,
+          learning: Math.max(topic.competencyBreakdown.learning, 100),
+          practice: Math.max(topic.competencyBreakdown.practice, 90),
           assessment: Math.max(topic.competencyBreakdown.assessment, 85),
-          practice: Math.max(topic.competencyBreakdown.practice, 85),
-          realWorld: Math.max(topic.competencyBreakdown.realWorld, 80)
+          realWorld: Math.max(topic.competencyBreakdown.realWorld, 80),
+          confidence: Math.max(topic.competencyBreakdown.confidence, 85)
         }
       }
 
@@ -341,6 +355,102 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           ...prev.topics,
           [topicId]: updated
         }
+      }
+    })
+  }, [])
+
+  const toggleTopicComplete = useCallback((topicId: string) => {
+    setState(prev => {
+      const topic = prev.topics[topicId]
+      if (!topic) return prev
+
+      const isCompleted = topic.status === 'validated' || topic.status === 'mastered'
+      const newStatus: TopicStatus = isCompleted ? 'not-started' : 'validated'
+
+      const updated: Topic = {
+        ...topic,
+        status: newStatus,
+        lastStudied: new Date().toISOString(),
+        needsReview: false,
+        checklist: isCompleted
+          ? {
+              understandConcept: false,
+              followExample: false,
+              completeExercise: false,
+              buildImplementation: false,
+              explainWithoutReference: false,
+              validateResult: false
+            }
+          : {
+              understandConcept: true,
+              followExample: true,
+              completeExercise: true,
+              buildImplementation: true,
+              explainWithoutReference: true,
+              validateResult: true
+            },
+        competencyBreakdown: isCompleted
+          ? {
+              learning: 0,
+              practice: 0,
+              assessment: 0,
+              realWorld: 0,
+              confidence: 0
+            }
+          : {
+              learning: 100,
+              practice: 95,
+              assessment: 90,
+              realWorld: 90,
+              confidence: 90
+            }
+      }
+
+      return {
+        ...prev,
+        topics: {
+          ...prev.topics,
+          [topicId]: updated
+        }
+      }
+    })
+  }, [])
+
+  const markPhaseComplete = useCallback((phaseId: number) => {
+    setState(prev => {
+      const phase = prev.phases.find(p => p.id === phaseId)
+      if (!phase) return prev
+
+      const updatedTopics = { ...prev.topics }
+      Object.values(prev.topics)
+        .filter(t => t.phaseId === phaseId)
+        .forEach(t => {
+          updatedTopics[t.id] = {
+            ...t,
+            status: 'validated',
+            lastStudied: new Date().toISOString(),
+            needsReview: false,
+            checklist: {
+              understandConcept: true,
+              followExample: true,
+              completeExercise: true,
+              buildImplementation: true,
+              explainWithoutReference: true,
+              validateResult: true
+            },
+            competencyBreakdown: {
+              learning: 100,
+              practice: 95,
+              assessment: 90,
+              realWorld: 90,
+              confidence: 90
+            }
+          }
+        })
+
+      return {
+        ...prev,
+        topics: updatedTopics
       }
     })
   }, [])
@@ -393,15 +503,38 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         [itemKey]: checked
       }
 
-      // Auto-compute status progression if checklist items are ticked
+      // Auto-compute status progression and competency scores when checklist items are ticked
       const checkedCount = Object.values(newChecklist).filter(Boolean).length
       let newStatus: TopicStatus = topic.status
+      let newBreakdown = { ...topic.competencyBreakdown }
+
       if (checkedCount === 6 && topic.status !== 'mastered') {
         newStatus = 'validated'
+        newBreakdown = {
+          learning: Math.max(topic.competencyBreakdown.learning, 100),
+          practice: Math.max(topic.competencyBreakdown.practice, 95),
+          assessment: Math.max(topic.competencyBreakdown.assessment, 90),
+          realWorld: Math.max(topic.competencyBreakdown.realWorld, 90),
+          confidence: Math.max(topic.competencyBreakdown.confidence, 90)
+        }
       } else if (checkedCount >= 4 && (topic.status === 'not-started' || topic.status === 'learning')) {
         newStatus = 'practicing'
+        newBreakdown = {
+          learning: Math.max(topic.competencyBreakdown.learning, 80),
+          practice: Math.max(topic.competencyBreakdown.practice, 75),
+          assessment: Math.max(topic.competencyBreakdown.assessment, 65),
+          realWorld: Math.max(topic.competencyBreakdown.realWorld, 60),
+          confidence: Math.max(topic.competencyBreakdown.confidence, 70)
+        }
       } else if (checkedCount >= 1 && topic.status === 'not-started') {
         newStatus = 'learning'
+        newBreakdown = {
+          learning: Math.max(topic.competencyBreakdown.learning, checkedCount * 25),
+          practice: Math.max(topic.competencyBreakdown.practice, checkedCount * 15),
+          assessment: topic.competencyBreakdown.assessment,
+          realWorld: topic.competencyBreakdown.realWorld,
+          confidence: Math.max(topic.competencyBreakdown.confidence, checkedCount * 15)
+        }
       }
 
       return {
@@ -411,6 +544,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           [topicId]: {
             ...topic,
             checklist: newChecklist,
+            competencyBreakdown: newBreakdown,
             status: newStatus,
             lastStudied: new Date().toISOString()
           }
@@ -863,12 +997,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setIsStudyModalOpen,
         isShortcutsOpen,
         setIsShortcutsOpen,
+        isCalendarOpen,
+        setIsCalendarOpen,
         isMobileNavOpen,
         setIsMobileNavOpen,
         saveStatus,
 
         updateTopic,
         validateTopic,
+        toggleTopicComplete,
+        markPhaseComplete,
         markTopicPriorKnown,
         updateChecklistItem,
         updateTopicBreakdown,

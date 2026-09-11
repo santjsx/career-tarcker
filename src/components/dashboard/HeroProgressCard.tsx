@@ -1,11 +1,11 @@
-import React from 'react'
-import { Award, Briefcase, CheckCircle2, TrendingUp, Layers, FolderKanban } from 'lucide-react'
+import React, { useMemo } from 'react'
+import { Award, Briefcase, CheckCircle2, TrendingUp, Layers, FolderKanban, Route, ChevronRight } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import { calculateCareerReadiness } from '../../services/readinessEngine'
 import { calculateOverallCompetency, calculateRoadmapCompletion } from '../../services/competencyEngine'
 
 export const HeroProgressCard: React.FC = () => {
-  const { state, setActiveView } = useApp()
+  const { state, setActiveView, setSelectedTopicId } = useApp()
 
   const readiness = calculateCareerReadiness(state)
   const overallCompetency = calculateOverallCompetency(state.topics)
@@ -15,6 +15,27 @@ export const HeroProgressCard: React.FC = () => {
   const totalTopicsCount = Object.keys(state.topics).length
 
   const completedProjectsCount = state.projects.filter(p => p.status === 'completed' || p.status === 'validated').length
+
+  // Find next topic to work on: first incomplete topic in canonical roadmap order
+  const nextIncompleteTopic = useMemo(() => {
+    const sortedPhases = [...state.phases].sort((a, b) => a.number - b.number)
+    for (const phase of sortedPhases) {
+      const topics = Object.values(state.topics).filter(t => t.phaseId === phase.id)
+      for (const topic of topics) {
+        if (topic.status !== 'validated' && topic.status !== 'mastered') {
+          return { topic, phase }
+        }
+      }
+    }
+    return null
+  }, [state.phases, state.topics])
+
+  const handleContinueLearning = () => {
+    if (nextIncompleteTopic) {
+      setSelectedTopicId(nextIncompleteTopic.topic.id)
+    }
+    setActiveView('roadmap')
+  }
 
   return (
     <div
@@ -170,6 +191,67 @@ export const HeroProgressCard: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Primary Roadmap CTA Strip */}
+      <div
+        style={{
+          marginTop: '0.25rem',
+          marginBottom: '1rem',
+          padding: '0.85rem 1.15rem',
+          backgroundColor: 'var(--bg-app)',
+          border: '1px solid var(--border-default)',
+          borderRadius: 'var(--radius-md)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '0.85rem'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: 'var(--radius-sm)',
+              backgroundColor: 'var(--accent-subtle)',
+              color: 'var(--accent-primary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}
+          >
+            <Route size={18} />
+          </div>
+          <div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              {nextIncompleteTopic ? `Next Up: Phase ${nextIncompleteTopic.phase.number} — ${nextIncompleteTopic.phase.name}` : 'Roadmap Status'}
+            </div>
+            <div style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+              {nextIncompleteTopic ? nextIncompleteTopic.topic.name : 'All 19 Phases Completed! 🎉'}
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          data-testid="hero-continue-learning-btn"
+          onClick={handleContinueLearning}
+          className="btn btn-primary btn-sm"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+            padding: '0.45rem 1rem',
+            fontWeight: 600,
+            fontSize: '0.8125rem'
+          }}
+        >
+          <span>{nextIncompleteTopic ? 'Continue Learning' : 'View Roadmap'}</span>
+          <ChevronRight size={15} />
+        </button>
       </div>
 
       {/* 4 Core Pillars */}

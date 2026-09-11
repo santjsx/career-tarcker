@@ -539,6 +539,16 @@ a:hover {
   align-items: center;
 }
 
+.date-pill-desktop {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.date-pill-compact {
+  display: none;
+}
+
 .header-right-actions {
   display: flex;
   align-items: center;
@@ -802,7 +812,23 @@ a:hover {
     display: none !important;
   }
   .header-center-section {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  .date-pill-desktop {
     display: none !important;
+  }
+  .date-pill-compact {
+    display: inline-flex !important;
+  }
+  .date-pill-meter {
+    display: none !important;
+  }
+  .date-pill-btn {
+    padding: 0.3rem 0.5rem !important;
+    gap: 0.35rem !important;
+    font-size: 0.75rem !important;
   }
   .header-search-label,
   .header-search-kbd {
@@ -853,6 +879,31 @@ a:hover {
   .header-save-indicator span:last-child {
     display: none !important;
   }
+  .calendar-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background-color: rgba(0, 0, 0, 0.65) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    z-index: 2050 !important;
+    animation: fadeIn 150ms ease-out;
+  }
+  .calendar-popover {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100vw - 2rem) !important;
+    max-width: 350px !important;
+    max-height: 88vh !important;
+    overflow-y: auto !important;
+    z-index: 2100 !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
+  }
   .hero-pillars-grid {
     grid-template-columns: repeat(2, 1fr) !important;
   }
@@ -883,5 +934,172 @@ a:hover {
   .study-session-modal-card {
     padding: 1rem 0.85rem !important;
     max-width: calc(100vw - 1rem) !important;
+  }
+}
+
+/* ==========================================================================
+   Frictionless Roadmap Table & 1-Click Completion Controls
+   ========================================================================== */
+
+.topic-table-header {
+  display: grid;
+  grid-template-columns: 44px 125px 1fr 90px 80px 75px;
+  padding: 0.5rem 1.25rem;
+  background-color: var(--bg-app);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  align-items: center;
+}
+
+.topic-table-row {
+  display: grid;
+  grid-template-columns: 44px 125px 1fr 90px 80px 75px;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+  align-items: center;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.topic-table-row:hover {
+  background-color: var(--bg-surface-hover);
+}
+
+.topic-toggle-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border-default);
+  background-color: transparent;
+  color: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: all 160ms var(--ease-out-quad);
+  touch-action: manipulation;
+  flex-shrink: 0;
+}
+
+.topic-toggle-btn:hover {
+  border-color: var(--accent-primary);
+  transform: scale(1.08);
+}
+
+.topic-toggle-btn.completed {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: #ffffff;
+}
+
+.topic-toggle-btn.completed:hover {
+  background-color: #16a34a;
+  border-color: #16a34a;
+}
+
+.roadmap-search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.65rem;
+  transition: border-color 150ms ease;
+}
+
+.roadmap-search-box:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-subtle);
+}
+
+.roadmap-search-input {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.8125rem;
+  outline: none;
+  width: 170px;
+}
+
+.roadmap-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.advanced-scoring-details {
+  background-color: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.advanced-scoring-details summary {
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  list-style: none;
+}
+
+.advanced-scoring-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.advanced-scoring-details[open] summary {
+  margin-bottom: 0.85rem;
+  color: var(--text-primary);
+}
+
+@media (max-width: 640px) {
+  .topic-table-header {
+    display: none !important;
+  }
+
+  .topic-table-row {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0.75rem 0.85rem !important;
+    gap: 0.65rem !important;
+  }
+
+  .topic-row-status-col {
+    display: none !important;
+  }
+
+  .topic-row-projects-col {
+    display: none !important;
+  }
+
+  .topic-row-details-col {
+    display: none !important;
+  }
+
+  .topic-row-main-col {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .topic-row-side-col {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  .roadmap-search-box {
+    width: 100% !important;
+  }
+
+  .roadmap-search-input {
+    width: 100% !important;
   }
 }

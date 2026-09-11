@@ -38,6 +38,7 @@ export const Header: React.FC = () => {
         {/* Mobile Hamburger Button */}
         <button
           type="button"
+          data-testid="mobile-hamburger-btn"
           onClick={() => setIsMobileNavOpen(true)}
           className="mobile-hamburger-btn"
           aria-label="Open navigation menu"

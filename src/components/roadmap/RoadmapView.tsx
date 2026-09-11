@@ -4,32 +4,27 @@ import {
   Filter,
   ArrowUpDown,
   ChevronDown,
-  ChevronRight,
   Star,
   CheckCircle2,
-  Clock,
-  ExternalLink,
-  BookOpen,
-  RotateCcw,
-  Sparkles,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Search
 } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
-import { Topic, Phase } from '../../types'
 import { calculatePhaseCompetency, calculateTopicCompetency } from '../../services/competencyEngine'
 
 export const RoadmapView: React.FC = () => {
   const {
     state,
     setSelectedTopicId,
-    setSelectedPhaseId,
-    setActiveView,
     updatePhaseToolChoice,
     roadmapStageFilter,
-    setRoadmapStageFilter
+    setRoadmapStageFilter,
+    toggleTopicComplete,
+    markPhaseComplete
   } = useApp()
 
   const [sortBy, setSortBy] = useState<'canonical' | 'priority' | 'competency' | 'competency-asc' | 'reviews'>('canonical')
+  const [searchQuery, setSearchQuery] = useState('')
   const [expandedPhases, setExpandedPhases] = useState<Record<number, boolean>>({
     1: true,
     2: true,
@@ -41,7 +36,7 @@ export const RoadmapView: React.FC = () => {
     setExpandedPhases(prev => ({ ...prev, [phaseId]: !prev[phaseId] }))
   }
 
-  // Filter phases by stage
+  // Filter phases by stage and keyword search
   const filteredPhases = useMemo(() => {
     let list = state.phases
 
@@ -54,7 +49,6 @@ export const RoadmapView: React.FC = () => {
       if (target === 'Data Analyst') list = list.filter(p => p.stageId === 'stage-a')
       else if (target === 'Strong Data Analyst') list = list.filter(p => p.stageId === 'stage-a' || p.stageId === 'stage-b')
       else if (target === 'Analytics Engineer') list = list.filter(p => p.stageId === 'stage-c' || p.stageId === 'stage-d')
-      // if 'Both', show all 19
     } else if (roadmapStageFilter === 'needs-review') {
       const reviewPhaseIds = new Set(
         Object.values(state.topics)
@@ -62,6 +56,17 @@ export const RoadmapView: React.FC = () => {
           .map(t => t.phaseId)
       )
       list = list.filter(p => reviewPhaseIds.has(p.id))
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim()
+      list = list.filter(p => {
+        const matchesPhase = p.name.toLowerCase().includes(q) || p.goal.toLowerCase().includes(q)
+        const hasMatchingTopic = Object.values(state.topics).some(
+          t => t.phaseId === p.id && (t.name.toLowerCase().includes(q) || t.goal.toLowerCase().includes(q))
+        )
+        return matchesPhase || hasMatchingTopic
+      })
     }
 
     if (sortBy === 'priority') {
@@ -75,7 +80,7 @@ export const RoadmapView: React.FC = () => {
     }
 
     return list
-  }, [state.phases, state.topics, state.user.careerTarget, roadmapStageFilter, sortBy])
+  }, [state.phases, state.topics, state.user.careerTarget, roadmapStageFilter, searchQuery, sortBy])
 
   const allFilteredIds = useMemo(() => filteredPhases.map(p => p.id), [filteredPhases])
   const areAllExpanded = allFilteredIds.length > 0 && allFilteredIds.every(id => expandedPhases[id])
@@ -95,6 +100,17 @@ export const RoadmapView: React.FC = () => {
       })
     }
   }
+
+  // Auto-expand phases when searching
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      setExpandedPhases(prev => {
+        const next = { ...prev }
+        filteredPhases.forEach(p => { next[p.id] = true })
+        return next
+      })
+    }
+  }, [searchQuery, filteredPhases])
 
   // Auto-expand phases when filtering by a specific stage
   useEffect(() => {
@@ -191,8 +207,38 @@ export const RoadmapView: React.FC = () => {
           )}
         </div>
 
-        {/* Filter and Sort Bar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+        {/* Filter, Search and Sort Bar */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+          {/* In-Page Keyword Search */}
+          <div className="roadmap-search-box">
+            <Search size={14} style={{ color: 'var(--text-muted)' }} />
+            <input
+              type="text"
+              data-testid="roadmap-search-input"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Search topics (e.g. SQL, Python)..."
+              className="roadmap-search-input"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--text-muted)',
+                  cursor: 'pointer',
+                  padding: '0 2px',
+                  fontSize: '0.8125rem'
+                }}
+                aria-label="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
           {/* Stage Filter */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
             <Filter size={14} style={{ color: 'var(--text-muted)' }} />
@@ -265,16 +311,21 @@ export const RoadmapView: React.FC = () => {
           <div className="card" style={{ textAlign: 'center', padding: '3rem 1.5rem', backgroundColor: 'var(--bg-surface)' }}>
             <CheckCircle2 size={36} style={{ color: 'var(--success)', margin: '0 auto 0.75rem auto' }} />
             <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
-              {roadmapStageFilter === 'needs-review' ? 'No Topics Need Review Right Now!' : 'No Phases Match Your Selected Filter'}
+              {searchQuery ? `No topics match "${searchQuery}"` : roadmapStageFilter === 'needs-review' ? 'No Topics Need Review Right Now!' : 'No Phases Match Your Selected Filter'}
             </h3>
             <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
-              {roadmapStageFilter === 'needs-review'
+              {searchQuery
+                ? 'Try searching for another keyword or clear the search field.'
+                : roadmapStageFilter === 'needs-review'
                 ? 'All topics in your roadmap are retained in good standing with zero review flags.'
                 : 'Try switching to All Phases or selecting another filter option.'}
             </p>
             <button
               type="button"
-              onClick={() => handleStageFilterChange('all')}
+              onClick={() => {
+                setSearchQuery('')
+                handleStageFilterChange('all')
+              }}
               className="btn btn-secondary btn-sm"
               style={{ margin: '0 auto' }}
             >
@@ -283,233 +334,292 @@ export const RoadmapView: React.FC = () => {
           </div>
         ) : (
           filteredPhases.map(phase => {
-          const phaseTopics = Object.values(state.topics).filter(t => t.phaseId === phase.id)
-          const compScore = calculatePhaseCompetency(phase.id, state.topics)
-          const isExpanded = !!expandedPhases[phase.id]
+            const phaseTopics = Object.values(state.topics).filter(t => {
+              if (t.phaseId !== phase.id) return false
+              if (!searchQuery.trim()) return true
+              const q = searchQuery.toLowerCase().trim()
+              return phase.name.toLowerCase().includes(q) || t.name.toLowerCase().includes(q) || t.goal.toLowerCase().includes(q)
+            })
 
-          return (
-            <div
-              key={phase.id}
-              className="card"
-              style={{
-                padding: 0,
-                overflow: 'hidden',
-                border: isExpanded ? '1px solid var(--border-default)' : '1px solid var(--border-subtle)'
-              }}
-            >
-              {/* Phase Header Bar */}
+            const compScore = calculatePhaseCompetency(phase.id, state.topics)
+            const isExpanded = !!expandedPhases[phase.id]
+            const isPhaseFullyComplete = phaseTopics.length > 0 && phaseTopics.every(t => t.status === 'validated' || t.status === 'mastered')
+
+            return (
               <div
-                onClick={() => togglePhaseExpand(phase.id)}
+                key={phase.id}
+                className="card"
                 style={{
-                  padding: '1rem 1.25rem',
-                  backgroundColor: 'var(--bg-surface)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  cursor: 'pointer',
-                  userSelect: 'none'
+                  padding: 0,
+                  overflow: 'hidden',
+                  border: isExpanded ? '1px solid var(--border-default)' : '1px solid var(--border-subtle)'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-                  <button
-                    type="button"
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      padding: 0,
-                      color: 'var(--text-muted)',
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)',
-                      transition: 'transform 200ms var(--ease-out-quad), color 150ms ease'
-                    }}
-                    aria-label={isExpanded ? 'Collapse phase' : 'Expand phase'}
-                  >
-                    <ChevronDown size={18} />
-                  </button>
-
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 700, fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
-                        PHASE {String(phase.number).padStart(2, '0')}
-                      </span>
-                      {phase.isContinuous && (
-                        <span className="badge badge-accent">Continuous Practice</span>
-                      )}
-                      <div style={{ display: 'flex', gap: '2px', color: 'var(--warning)' }}>
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <Star
-                            key={i}
-                            size={11}
-                            fill={i < phase.priority ? 'currentColor' : 'none'}
-                            stroke="currentColor"
-                          />
-                        ))}
-                      </div>
-                    </div>
-
-                    <h3 style={{ fontSize: '1.0625rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-                      {phase.name}
-                    </h3>
-                  </div>
-                </div>
-
-                {/* Right Header Stats & Tool Choice */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                  {/* Tool Choice if applicable */}
-                  {phase.toolChoice && (
-                    <div
-                      onClick={e => e.stopPropagation()}
+                {/* Phase Header Bar */}
+                <div
+                  onClick={() => togglePhaseExpand(phase.id)}
+                  style={{
+                    padding: '1rem 1.25rem',
+                    backgroundColor: 'var(--bg-surface)',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    userSelect: 'none',
+                    flexWrap: 'wrap',
+                    gap: '0.75rem'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                    <button
+                      type="button"
                       style={{
-                        display: 'flex',
+                        background: 'none',
+                        border: 'none',
+                        padding: 0,
+                        color: 'var(--text-muted)',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '0.4rem',
-                        fontSize: '0.75rem',
-                        backgroundColor: 'var(--bg-app)',
-                        padding: '0.2rem 0.5rem',
-                        borderRadius: 'var(--radius-sm)',
-                        border: '1px solid var(--border-subtle)'
+                        justifyContent: 'center',
+                        transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)',
+                        transition: 'transform 200ms var(--ease-out-quad), color 150ms ease'
                       }}
+                      aria-label={isExpanded ? 'Collapse phase' : 'Expand phase'}
                     >
-                      <SlidersHorizontal size={12} style={{ color: 'var(--text-muted)' }} />
-                      <select
-                        value={phase.toolChoice.selected}
-                        onChange={e => updatePhaseToolChoice(phase.id, e.target.value)}
+                      <ChevronDown size={18} />
+                    </button>
+
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 700, fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
+                          PHASE {String(phase.number).padStart(2, '0')}
+                        </span>
+                        {phase.isContinuous && (
+                          <span className="badge badge-accent">Continuous Practice</span>
+                        )}
+                        <div style={{ display: 'flex', gap: '2px', color: 'var(--warning)' }}>
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star
+                              key={i}
+                              size={11}
+                              fill={i < phase.priority ? 'currentColor' : 'none'}
+                              stroke="currentColor"
+                            />
+                          ))}
+                        </div>
+                      </div>
+
+                      <h3 style={{ fontSize: '1.0625rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                        {phase.name}
+                      </h3>
+                    </div>
+                  </div>
+
+                  {/* Right Header Stats & Tool Choice */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                    {/* Batch Mark Phase Complete Button */}
+                    {isPhaseFullyComplete ? (
+                      <div
                         style={{
-                          background: 'none',
-                          border: 'none',
-                          color: 'var(--accent-primary)',
-                          fontWeight: 600,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          padding: '0.25rem 0.6rem',
+                          backgroundColor: 'rgba(34, 197, 94, 0.12)',
+                          color: 'var(--success)',
+                          borderRadius: 'var(--radius-full)',
                           fontSize: '0.75rem',
-                          cursor: 'pointer',
-                          outline: 'none'
+                          fontWeight: 600
+                        }}
+                        title="All topics in this phase are validated"
+                      >
+                        <CheckCircle2 size={13} />
+                        <span>All Complete</span>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        data-testid={`mark-phase-done-${phase.id}`}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          markPhaseComplete(phase.id)
+                        }}
+                        className="btn btn-ghost btn-xs"
+                        style={{
+                          fontSize: '0.75rem',
+                          padding: '0.25rem 0.55rem',
+                          color: 'var(--text-muted)',
+                          border: '1px solid var(--border-subtle)',
+                          borderRadius: 'var(--radius-sm)',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem'
+                        }}
+                        title="1-click: Mark all topics in this phase as completed"
+                      >
+                        <CheckCircle2 size={13} style={{ color: 'var(--success)' }} />
+                        <span>Mark Phase Done</span>
+                      </button>
+                    )}
+
+                    {/* Tool Choice if applicable */}
+                    {phase.toolChoice && (
+                      <div
+                        onClick={e => e.stopPropagation()}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          fontSize: '0.75rem',
+                          backgroundColor: 'var(--bg-app)',
+                          padding: '0.2rem 0.5rem',
+                          borderRadius: 'var(--radius-sm)',
+                          border: '1px solid var(--border-subtle)'
                         }}
                       >
-                        {phase.toolChoice.options.map(opt => (
-                          <option key={opt} value={opt}>{opt}</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-
-                  {/* Score Pill */}
-                  <div style={{ textAlign: 'right', minWidth: '80px' }}>
-                    <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>Score</div>
-                    <div style={{ fontSize: '0.9375rem', fontWeight: 700, color: compScore >= 70 ? 'var(--success)' : 'var(--accent-primary)' }}>
-                      {compScore}%
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Collapsible Topics Table */}
-              {isExpanded && (
-                <div style={{ borderTop: '1px solid var(--border-subtle)' }}>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: '130px 1fr 100px 90px 80px',
-                      padding: '0.5rem 1.25rem',
-                      backgroundColor: 'var(--bg-app)',
-                      fontSize: '0.6875rem',
-                      fontWeight: 600,
-                      textTransform: 'uppercase',
-                      color: 'var(--text-muted)',
-                      letterSpacing: '0.05em'
-                    }}
-                  >
-                    <span>Status</span>
-                    <span>Topic</span>
-                    <span style={{ textAlign: 'center' }}>Score</span>
-                    <span style={{ textAlign: 'center' }}>Projects</span>
-                    <span style={{ textAlign: 'right' }}>Details</span>
-                  </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    {phaseTopics.map(topic => {
-                      const topicComp = calculateTopicCompetency(topic.competencyBreakdown)
-
-                      const statusBadge = {
-                        'not-started': { label: 'Not Started', badge: 'badge-default' },
-                        'learning': { label: 'Learning', badge: 'badge-accent' },
-                        'practicing': { label: 'Practicing', badge: 'badge-info' },
-                        'demonstrated': { label: 'Demonstrated', badge: 'badge-warning' },
-                        'validated': { label: 'Validated', badge: 'badge-success' },
-                        'mastered': { label: 'Mastered', badge: 'badge-success' },
-                        'needs-review': { label: 'Needs Review', badge: 'badge-danger' }
-                      }[topic.status]
-
-                      return (
-                        <div
-                          key={topic.id}
-                          onClick={() => setSelectedTopicId(topic.id)}
+                        <SlidersHorizontal size={12} style={{ color: 'var(--text-muted)' }} />
+                        <select
+                          value={phase.toolChoice.selected}
+                          onChange={e => updatePhaseToolChoice(phase.id, e.target.value)}
                           style={{
-                            display: 'grid',
-                            gridTemplateColumns: '130px 1fr 100px 90px 80px',
-                            padding: '0.75rem 1.25rem',
-                            borderBottom: '1px solid var(--border-subtle)',
-                            alignItems: 'center',
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--accent-primary)',
+                            fontWeight: 600,
+                            fontSize: '0.75rem',
                             cursor: 'pointer',
-                            transition: 'background-color var(--transition-fast)'
+                            outline: 'none'
                           }}
-                          onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--bg-surface-hover)')}
-                          onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
                         >
-                          <div>
-                            <span className={`badge ${statusBadge?.badge || 'badge-default'}`} style={{ fontSize: '0.7rem' }}>
-                              {statusBadge?.label}
-                            </span>
-                          </div>
+                          {phase.toolChoice.options.map(opt => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
 
-                          <div>
-                            <div style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--text-primary)' }}>
-                              {topic.name}
-                            </div>
-                            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                              {topic.goal}
-                            </div>
-                          </div>
-
-                          <div style={{ textAlign: 'center' }}>
-                            <span style={{ fontWeight: 600, fontSize: '0.8125rem', color: topicComp >= 70 ? 'var(--success)' : 'var(--text-primary)' }}>
-                              {topicComp}%
-                            </span>
-                          </div>
-
-                          <div style={{ textAlign: 'center' }}>
-                            {topic.evidence.length > 0 ? (
-                              <span className="badge badge-default" style={{ fontSize: '0.6875rem' }}>
-                                {topic.evidence.length} file{topic.evidence.length > 1 ? 's' : ''}
-                              </span>
-                            ) : (
-                              <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>—</span>
-                            )}
-                          </div>
-
-                          <div style={{ textAlign: 'right' }}>
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                setSelectedTopicId(topic.id)
-                              }}
-                              className="btn btn-ghost btn-sm"
-                              style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
-                            >
-                              Details
-                            </button>
-                          </div>
-                        </div>
-                      )
-                    })}
+                    {/* Score Pill */}
+                    <div style={{ textAlign: 'right', minWidth: '70px' }}>
+                      <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>Score</div>
+                      <div style={{ fontSize: '0.9375rem', fontWeight: 700, color: compScore >= 70 ? 'var(--success)' : 'var(--accent-primary)' }}>
+                        {compScore}%
+                      </div>
+                    </div>
                   </div>
                 </div>
-              )}
-            </div>
-          )
-        }))}
+
+                {/* Collapsible Topics Table */}
+                {isExpanded && (
+                  <div style={{ borderTop: '1px solid var(--border-subtle)' }}>
+                    <div className="topic-table-header">
+                      <span style={{ textAlign: 'center' }}>Done</span>
+                      <span className="topic-row-status-col">Status</span>
+                      <span className="topic-row-main-col">Topic</span>
+                      <span style={{ textAlign: 'center' }}>Score</span>
+                      <span className="topic-row-projects-col" style={{ textAlign: 'center' }}>Projects</span>
+                      <span className="topic-row-details-col" style={{ textAlign: 'right' }}>Details</span>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      {phaseTopics.map(topic => {
+                        const topicComp = calculateTopicCompetency(topic.competencyBreakdown)
+                        const isDone = topic.status === 'validated' || topic.status === 'mastered'
+
+                        const statusBadge = {
+                          'not-started': { label: 'Not Started', badge: 'badge-default' },
+                          'learning': { label: 'Learning', badge: 'badge-accent' },
+                          'practicing': { label: 'Practicing', badge: 'badge-info' },
+                          'demonstrated': { label: 'Demonstrated', badge: 'badge-warning' },
+                          'validated': { label: 'Validated', badge: 'badge-success' },
+                          'mastered': { label: 'Mastered', badge: 'badge-success' },
+                          'needs-review': { label: 'Needs Review', badge: 'badge-danger' }
+                        }[topic.status]
+
+                        return (
+                          <div
+                            key={topic.id}
+                            className="topic-table-row"
+                            onClick={() => setSelectedTopicId(topic.id)}
+                          >
+                            {/* 1-Click Toggle Button */}
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                              <button
+                                type="button"
+                                data-testid={`topic-toggle-${topic.id}`}
+                                className={`topic-toggle-btn ${isDone ? 'completed' : ''}`}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  toggleTopicComplete(topic.id)
+                                }}
+                                title={isDone ? 'Completed! Click to mark incomplete' : '1-click: Mark topic completed'}
+                                aria-label={isDone ? `Mark ${topic.name} as incomplete` : `Mark ${topic.name} as complete`}
+                              >
+                                {isDone ? (
+                                  <CheckCircle2 size={16} strokeWidth={2.5} />
+                                ) : null}
+                              </button>
+                            </div>
+
+                            {/* Status Badge (Desktop only) */}
+                            <div className="topic-row-status-col">
+                              <span className={`badge ${statusBadge?.badge || 'badge-default'}`} style={{ fontSize: '0.7rem' }}>
+                                {statusBadge?.label}
+                              </span>
+                            </div>
+
+                            {/* Topic Main Info */}
+                            <div className="topic-row-main-col">
+                              <div style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--text-primary)' }}>
+                                {topic.name}
+                              </div>
+                              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                                {topic.goal}
+                              </div>
+                            </div>
+
+                            {/* Competency Score */}
+                            <div style={{ textAlign: 'center' }}>
+                              <span style={{ fontWeight: 600, fontSize: '0.8125rem', color: topicComp >= 70 ? 'var(--success)' : 'var(--text-primary)' }}>
+                                {topicComp}%
+                              </span>
+                            </div>
+
+                            {/* Evidence / Projects Count */}
+                            <div className="topic-row-projects-col" style={{ textAlign: 'center' }}>
+                              {topic.evidence.length > 0 ? (
+                                <span className="badge badge-default" style={{ fontSize: '0.6875rem' }}>
+                                  {topic.evidence.length} file{topic.evidence.length > 1 ? 's' : ''}
+                                </span>
+                              ) : (
+                                <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>—</span>
+                              )}
+                            </div>
+
+                            {/* Details Action Button */}
+                            <div className="topic-row-details-col" style={{ textAlign: 'right' }}>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setSelectedTopicId(topic.id)
+                                }}
+                                className="btn btn-ghost btn-sm"
+                                style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+                              >
+                                Details
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })
+        )}
       </div>
     </div>
   )

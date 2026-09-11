@@ -12,7 +12,8 @@ import {
   Calendar,
   CheckSquare,
   Square,
-  Award
+  Award,
+  SlidersHorizontal
 } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import { TopicStatus, EvidenceType } from '../../types'
@@ -25,6 +26,7 @@ export const TopicDrawer: React.FC = () => {
     state,
     updateTopic,
     validateTopic,
+    toggleTopicComplete,
     markTopicPriorKnown,
     updateChecklistItem,
     updateTopicBreakdown,
@@ -45,6 +47,7 @@ export const TopicDrawer: React.FC = () => {
   const phase = state.phases.find(p => p.id === topic.phaseId)
   const competencyScore = calculateTopicCompetency(topic.competencyBreakdown)
   const validationCheck = canValidateTopic(topic)
+  const isDone = topic.status === 'validated' || topic.status === 'mastered'
 
   const handleStatusChange = (status: TopicStatus) => {
     updateTopic(topic.id, { status })
@@ -85,7 +88,7 @@ export const TopicDrawer: React.FC = () => {
   return (
     <>
       <div className="overlay" onClick={() => setSelectedTopicId(null)} />
-      <div className="drawer">
+      <div className="drawer" data-testid="topic-drawer">
         {/* Drawer Header */}
         <div
           style={{
@@ -165,8 +168,8 @@ export const TopicDrawer: React.FC = () => {
             </select>
           </div>
 
-          {/* Competency Meter */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {/* Competency Meter & Quick Actions */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
             <div style={{ textAlign: 'right' }}>
               <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
                 Skill Score
@@ -177,11 +180,22 @@ export const TopicDrawer: React.FC = () => {
             </div>
             <button
               type="button"
+              data-testid="drawer-toggle-complete-btn"
+              onClick={() => toggleTopicComplete(topic.id)}
+              className={isDone ? 'btn btn-secondary btn-sm' : 'btn btn-primary btn-sm'}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
+              title={isDone ? 'Topic is completed. Click to mark incomplete' : '1-click: Mark topic completed'}
+            >
+              <CheckCircle2 size={15} style={{ color: isDone ? 'var(--success)' : 'currentColor' }} />
+              <span>{isDone ? 'Done ✓' : 'Mark Done'}</span>
+            </button>
+            <button
+              type="button"
               onClick={() => startStudySession(topic.id)}
-              className="btn btn-primary btn-sm"
+              className="btn btn-secondary btn-sm"
               title="Start focused study session"
             >
-              Study Topic
+              Study
             </button>
           </div>
         </div>
@@ -305,16 +319,19 @@ export const TopicDrawer: React.FC = () => {
                 </div>
               </div>
 
-              {/* Score Breakdown Sliders */}
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                  <h4 style={{ fontSize: '0.9375rem', fontWeight: 600 }}>
-                    How Your Score is Calculated
-                  </h4>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Weights</span>
-                </div>
+              {/* Score Breakdown (Collapsed into Details Accordion for zero friction) */}
+              <details className="advanced-scoring-details">
+                <summary>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <SlidersHorizontal size={14} style={{ color: 'var(--text-muted)' }} />
+                    <span>Advanced: Custom Scoring Weights & Breakdown</span>
+                  </div>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                    Optional ▾
+                  </span>
+                </summary>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.75rem' }}>
                   {[
                     { key: 'learning', label: '1. Reading & Videos', weight: '20%' },
                     { key: 'practice', label: '2. Practice Exercises', weight: '25%' },
@@ -341,18 +358,19 @@ export const TopicDrawer: React.FC = () => {
                     )
                   })}
                 </div>
-              </div>
+              </details>
 
               {/* Complete Topic Button */}
               <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem' }}>
                 <button
                   type="button"
-                  onClick={() => validateTopic(topic.id)}
-                  className="btn btn-primary"
+                  data-testid="drawer-bottom-complete-btn"
+                  onClick={() => toggleTopicComplete(topic.id)}
+                  className={isDone ? 'btn btn-secondary' : 'btn btn-primary'}
                   style={{ width: '100%', gap: '0.5rem' }}
                 >
                   <Award size={16} />
-                  <span>Mark as Completed</span>
+                  <span>{isDone ? 'Mark as Incomplete' : 'Mark as Completed (100% Score)'}</span>
                 </button>
               </div>
             </div>

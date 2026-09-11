@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Calendar as CalendarIcon, Clock, ChevronDown, ChevronLeft, ChevronRight, CheckCircle2, Bookmark } from 'lucide-react'
+import React, { useEffect, useRef } from 'react'
+import { Calendar as CalendarIcon, Clock, ChevronDown, ChevronLeft, ChevronRight, CheckCircle2, Bookmark, X } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 
 export const DateCalendarWidget: React.FC = () => {
-  const { state } = useApp()
-  const [isOpen, setIsOpen] = useState(false)
-  const [currentDate, setCurrentDate] = useState(new Date())
-  const [viewDate, setViewDate] = useState(new Date())
+  const { state, isCalendarOpen, setIsCalendarOpen } = useApp()
+  const isOpen = isCalendarOpen
+  const setIsOpen = setIsCalendarOpen
+  const [currentDate, setCurrentDate] = React.useState(new Date())
+  const [viewDate, setViewDate] = React.useState(new Date())
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Update clock every minute
@@ -26,7 +27,7 @@ export const DateCalendarWidget: React.FC = () => {
       document.addEventListener('mousedown', handleClickOutside)
     }
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [isOpen])
+  }, [isOpen, setIsOpen])
 
   // Year computations
   const currentYear = currentDate.getFullYear()
@@ -79,7 +80,8 @@ export const DateCalendarWidget: React.FC = () => {
     <div className="date-calendar-widget-container" ref={dropdownRef} style={{ position: 'relative' }}>
       <button
         type="button"
-        onClick={() => setIsOpen(prev => !prev)}
+        data-testid="header-date-pill-btn"
+        onClick={() => setIsOpen(!isOpen)}
         className="date-pill-btn"
         aria-label="View calendar and year progress"
         aria-expanded={isOpen}
@@ -116,9 +118,10 @@ export const DateCalendarWidget: React.FC = () => {
           e.currentTarget.style.transform = 'scale(1)'
         }}
       >
-        <CalendarIcon size={15} style={{ color: 'var(--accent-primary)' }} />
+        <CalendarIcon size={15} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+        {/* Desktop full date display */}
+        <div className="date-pill-desktop" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
           <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
             {dayName}, {monthName} {dayNum}, {currentYear}
           </span>
@@ -128,8 +131,20 @@ export const DateCalendarWidget: React.FC = () => {
           </span>
         </div>
 
+        {/* Mobile / tablet compact date display */}
+        <div className="date-pill-compact" style={{ alignItems: 'center', gap: '0.35rem' }}>
+          <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+            {monthName} {dayNum}
+          </span>
+          <span style={{ color: 'var(--text-muted)' }}>•</span>
+          <span style={{ color: 'var(--accent-primary)', fontWeight: 600, fontSize: '0.75rem' }}>
+            {daysRemaining}d left
+          </span>
+        </div>
+
         {/* Subtle Year Meter */}
         <div
+          className="date-pill-meter"
           title={`${yearElapsedPercent}% of ${currentYear} elapsed (${daysRemaining} days remaining)`}
           style={{
             width: '38px',
@@ -150,37 +165,63 @@ export const DateCalendarWidget: React.FC = () => {
           />
         </div>
 
-        <ChevronDown size={14} style={{ color: 'var(--text-muted)', transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 150ms' }} />
+        <ChevronDown size={14} style={{ color: 'var(--text-muted)', transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 150ms', flexShrink: 0 }} />
       </button>
 
       {/* Dropdown Calendar Popover */}
       {isOpen && (
-        <div
-          className="calendar-popover"
-          style={{
-            position: 'absolute',
-            top: 'calc(100% + 8px)',
-            right: 0,
-            width: '320px',
-            backgroundColor: 'var(--bg-surface-elevated)',
-            border: '1px solid var(--border-default)',
-            borderRadius: 'var(--radius-lg)',
-            boxShadow: 'var(--shadow-lg)',
-            padding: '1.1rem',
-            zIndex: 1050,
-            animation: 'fadeIn 150ms ease-out'
-          }}
-        >
-          {/* Popover Header: Year Summary */}
-          <div style={{ paddingBottom: '0.75rem', borderBottom: '1px solid var(--border-subtle)', marginBottom: '0.85rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.25rem' }}>
-              <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', fontWeight: 600 }}>
-                {currentYear} Year Progress
-              </span>
-              <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--accent-primary)' }}>
-                {yearElapsedPercent}% Completed
-              </span>
-            </div>
+        <>
+          <div
+            className="calendar-backdrop"
+            onClick={() => setIsOpen(false)}
+            aria-hidden="true"
+          />
+          <div
+            className="calendar-popover"
+            data-testid="calendar-popover"
+            style={{
+              position: 'absolute',
+              top: 'calc(100% + 8px)',
+              right: 0,
+              width: '320px',
+              backgroundColor: 'var(--bg-surface-elevated)',
+              border: '1px solid var(--border-default)',
+              borderRadius: 'var(--radius-lg)',
+              boxShadow: 'var(--shadow-lg)',
+              padding: '1.1rem',
+              zIndex: 2100,
+              animation: 'fadeIn 150ms ease-out'
+            }}
+          >
+            {/* Popover Header: Year Summary */}
+            <div style={{ paddingBottom: '0.75rem', borderBottom: '1px solid var(--border-subtle)', marginBottom: '0.85rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
+                <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', fontWeight: 600 }}>
+                  {currentYear} Year Progress
+                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--accent-primary)' }}>
+                    {yearElapsedPercent}%
+                  </span>
+                  <button
+                    type="button"
+                    data-testid="calendar-close-btn"
+                    onClick={() => setIsOpen(false)}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'var(--text-muted)',
+                      cursor: 'pointer',
+                      padding: '0.1rem',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                    aria-label="Close calendar"
+                  >
+                    <X size={15} />
+                  </button>
+                </div>
+              </div>
             <div style={{ width: '100%', height: '6px', backgroundColor: 'var(--border-subtle)', borderRadius: 'var(--radius-full)', overflow: 'hidden', marginBottom: '0.4rem' }}>
               <div style={{ width: `${yearElapsedPercent}%`, height: '100%', backgroundColor: 'var(--accent-primary)', borderRadius: 'var(--radius-full)' }} />
             </div>
@@ -251,6 +292,7 @@ export const DateCalendarWidget: React.FC = () => {
               return (
                 <div
                   key={`day-${day}`}
+                  className="calendar-day-cell"
                   style={{
                     height: '30px',
                     display: 'flex',
@@ -293,7 +335,8 @@ export const DateCalendarWidget: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
-    </div>
+      </>
+    )}
+  </div>
   )
 }
