@@ -86,16 +86,19 @@ export const DateCalendarWidget: React.FC = () => {
         aria-label="View calendar and year progress"
         aria-expanded={isOpen}
         style={{
-          display: 'flex',
+          display: 'inline-flex',
           alignItems: 'center',
-          gap: '0.65rem',
-          padding: '0.35rem 0.75rem',
+          gap: '0.45rem',
+          padding: '0.35rem 0.65rem',
           backgroundColor: isOpen ? 'var(--bg-surface-elevated)' : 'var(--bg-surface)',
           border: isOpen ? '1px solid var(--accent-border)' : '1px solid var(--border-subtle)',
           borderRadius: 'var(--radius-md)',
           cursor: 'pointer',
           color: 'var(--text-primary)',
           fontSize: '0.8125rem',
+          whiteSpace: 'nowrap',
+          flexShrink: 0,
+          lineHeight: 1,
           transition: 'transform 160ms var(--ease-out-quad), background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease',
           userSelect: 'none'
         }}
@@ -118,27 +121,29 @@ export const DateCalendarWidget: React.FC = () => {
           e.currentTarget.style.transform = 'scale(1)'
         }}
       >
-        <CalendarIcon size={15} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
+        <CalendarIcon size={14} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
         
         {/* Desktop full date display */}
-        <div className="date-pill-desktop" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-          <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+        <div className="date-pill-desktop" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', whiteSpace: 'nowrap' }}>
+          <span style={{ fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
             {dayName}, {monthName} {dayNum}, {currentYear}
           </span>
           <span style={{ color: 'var(--text-muted)' }}>•</span>
-          <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>
+          <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>
             <strong style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>{daysRemaining}</strong>d left in {currentYear}
           </span>
         </div>
 
         {/* Mobile / tablet compact date display */}
-        <div className="date-pill-compact" style={{ alignItems: 'center', gap: '0.35rem' }}>
-          <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+        <div className="date-pill-compact" style={{ alignItems: 'center', gap: '0.35rem', whiteSpace: 'nowrap' }}>
+          <span className="date-pill-date" style={{ fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
             {monthName} {dayNum}
           </span>
-          <span style={{ color: 'var(--text-muted)' }}>•</span>
-          <span style={{ color: 'var(--accent-primary)', fontWeight: 600, fontSize: '0.75rem' }}>
-            {daysRemaining}d left
+          <span className="date-pill-countdown" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', whiteSpace: 'nowrap' }}>
+            <span style={{ color: 'var(--text-muted)' }}>•</span>
+            <span style={{ color: 'var(--accent-primary)', fontWeight: 600, fontSize: '0.75rem' }}>
+              {daysRemaining}d left
+            </span>
           </span>
         </div>
 
@@ -152,7 +157,8 @@ export const DateCalendarWidget: React.FC = () => {
             backgroundColor: 'var(--border-subtle)',
             borderRadius: 'var(--radius-full)',
             overflow: 'hidden',
-            marginLeft: '0.2rem'
+            marginLeft: '0.2rem',
+            flexShrink: 0
           }}
         >
           <div
@@ -165,7 +171,7 @@ export const DateCalendarWidget: React.FC = () => {
           />
         </div>
 
-        <ChevronDown size={14} style={{ color: 'var(--text-muted)', transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 150ms', flexShrink: 0 }} />
+        <ChevronDown size={13} style={{ color: 'var(--text-muted)', transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 150ms', flexShrink: 0 }} />
       </button>
 
       {/* Dropdown Calendar Popover */}

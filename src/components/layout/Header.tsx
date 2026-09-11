@@ -90,7 +90,7 @@ export const Header: React.FC = () => {
             backgroundColor: 'var(--bg-app)',
             borderRadius: 'var(--radius-xs)',
             border: '1px solid var(--border-subtle)',
-            marginLeft: '0.5rem',
+            marginLeft: '0.35rem',
             flexShrink: 0,
             flexGrow: 0,
             boxSizing: 'border-box',
@@ -138,13 +138,13 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Right: Actions */}
-      <div className="header-right-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+      <div className="header-right-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
         {/* Cmd+K Search trigger */}
         <button
           type="button"
           onClick={() => setIsSearchOpen(true)}
           className="btn btn-secondary btn-sm header-search-btn"
-          style={{ gap: '0.65rem', padding: '0.35rem 0.75rem', flexShrink: 0 }}
+          style={{ gap: '0.5rem', padding: '0.35rem 0.65rem', flexShrink: 0 }}
           title="Search anything (Cmd+K)"
           aria-label="Search"
         >
@@ -225,7 +225,7 @@ export const Header: React.FC = () => {
                     flexShrink: 0
                   }}
                 />
-                <span style={{ letterSpacing: '0.01em' }}>
+                <span className="header-study-active-text" style={{ letterSpacing: '0.01em' }}>
                   {isRunning ? 'Study Active' : 'Study Paused'}
                 </span>
               </button>

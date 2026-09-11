@@ -18,6 +18,24 @@ test.describe('Mobile Calendar and Frictionless Roadmap Experience', () => {
     const datePillBtn = page.locator('button[data-testid="header-date-pill-btn"]')
     await expect(datePillBtn).toBeVisible()
 
+    // 1b. Verify single-line height constraint and zero clipping
+    const pillBox = await datePillBtn.boundingBox()
+    expect(pillBox).not.toBeNull()
+    expect(pillBox!.height).toBeLessThanOrEqual(36)
+
+    const isOverflowing = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)
+    expect(isOverflowing).toBeFalsy()
+
+    // Verify rightmost actions are completely inside viewport
+    const rightButtons = page.locator('.header-right-actions button')
+    const btnCount = await rightButtons.count()
+    for (let i = 0; i < btnCount; i++) {
+      const btnBox = await rightButtons.nth(i).boundingBox()
+      if (btnBox) {
+        expect(btnBox.x + btnBox.width).toBeLessThanOrEqual(375)
+      }
+    }
+
     // 2. Click the date pill to open calendar
     await datePillBtn.click()
 
