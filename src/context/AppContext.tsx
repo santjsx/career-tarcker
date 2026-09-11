@@ -21,6 +21,9 @@ export interface AppContextType {
   state: AppState
   activeView: string
   setActiveView: (view: string) => void
+  roadmapStageFilter: string
+  setRoadmapStageFilter: (filter: string) => void
+  navigateToStage: (stageId: string) => void
   selectedPhaseId: number | null
   setSelectedPhaseId: (id: number | null) => void
   selectedProjectId: number | null
@@ -148,6 +151,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   })
 
   const [activeView, setActiveView] = useState<string>('overview')
+  const [roadmapStageFilter, setRoadmapStageFilter] = useState<string>('all')
+
+  const navigateToStage = useCallback((stageId: string) => {
+    setRoadmapStageFilter(stageId)
+    setActiveView('roadmap')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    const mainEl = document.querySelector('main')
+    if (mainEl) {
+      mainEl.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [])
+
   const [selectedPhaseId, setSelectedPhaseId] = useState<number | null>(null)
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null)
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null)
@@ -833,6 +848,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         state,
         activeView,
         setActiveView,
+        roadmapStageFilter,
+        setRoadmapStageFilter,
+        navigateToStage,
         selectedPhaseId,
         setSelectedPhaseId,
         selectedProjectId,

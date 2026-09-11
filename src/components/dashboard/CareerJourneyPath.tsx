@@ -4,7 +4,7 @@ import { useApp } from '../../context/AppContext'
 import { evaluateMilestone1, evaluateMilestone2 } from '../../services/readinessEngine'
 
 export const CareerJourneyPath: React.FC = () => {
-  const { state, setActiveView, setSelectedProjectId } = useApp()
+  const { state, setActiveView, setSelectedProjectId, navigateToStage } = useApp()
 
   const m1 = evaluateMilestone1(state)
   const m2 = evaluateMilestone2(state)
@@ -15,7 +15,7 @@ export const CareerJourneyPath: React.FC = () => {
       title: '1. Analyst Basics',
       subtitle: 'SQL, Excel, Stats, Power BI',
       status: m1.isUnlocked ? 'completed' : 'active',
-      onClick: () => setActiveView('roadmap')
+      onClick: () => navigateToStage('stage-a')
     },
     {
       id: 'step-2',
@@ -40,7 +40,7 @@ export const CareerJourneyPath: React.FC = () => {
       title: '4. Python & DBs',
       subtitle: 'Python, Pandas, PostgreSQL',
       status: m2.isUnlocked ? 'completed' : m1.isUnlocked ? 'active' : 'subdued',
-      onClick: () => setActiveView('roadmap')
+      onClick: () => navigateToStage('stage-b')
     },
     {
       id: 'step-5',
@@ -57,7 +57,7 @@ export const CareerJourneyPath: React.FC = () => {
       title: '6. Engineer Tools',
       subtitle: 'dbt, Warehouses, Airflow',
       status: 'subdued',
-      onClick: () => setActiveView('roadmap')
+      onClick: () => navigateToStage('stage-c')
     },
     {
       id: 'step-7',

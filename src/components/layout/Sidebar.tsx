@@ -28,7 +28,10 @@ export const Sidebar: React.FC = () => {
     resetToSampleState,
     exportStateJson,
     importStateJson,
-    showToast
+    showToast,
+    roadmapStageFilter,
+    setRoadmapStageFilter,
+    navigateToStage
   } = useApp()
 
   const navItems = [
@@ -129,7 +132,12 @@ export const Sidebar: React.FC = () => {
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => setActiveView(item.id)}
+                  onClick={() => {
+                    setActiveView(item.id)
+                    if (item.id === 'roadmap') {
+                      setRoadmapStageFilter('all')
+                    }
+                  }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -192,53 +200,107 @@ export const Sidebar: React.FC = () => {
 
         {/* Career Stages Quick Jump */}
         <div>
-          <div style={{ fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', fontWeight: 600, padding: '0 0.5rem 0.5rem 0.5rem' }}>
-            Stages
+          <div style={{
+            fontSize: '0.6875rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.06em',
+            color: 'var(--text-muted)',
+            fontWeight: 600,
+            padding: '0 0.5rem 0.5rem 0.5rem',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <span>Stages</span>
+            {activeView === 'roadmap' && roadmapStageFilter !== 'all' && (
+              <button
+                type="button"
+                data-testid="sidebar-clear-stage-filter"
+                onClick={() => setRoadmapStageFilter('all')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--accent-primary)',
+                  fontSize: '0.65rem',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  padding: 0,
+                  textTransform: 'none'
+                }}
+                title="Show all phases in roadmap"
+              >
+                Show All
+              </button>
+            )}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', fontSize: '0.75rem' }}>
             {[
-              { num: '1', label: 'Analyst Basics', badge: 'P1–4', variant: 'badge-success' },
-              { num: '2', label: 'Strong Analyst', badge: 'P5–9', variant: 'badge-warning' },
-              { num: '3', label: 'Analytics Engineer', badge: 'P10–15', variant: 'badge-info' },
-              { num: '4', label: 'Final Projects', badge: 'P16–19', variant: 'badge-default' }
-            ].map(stage => (
-              <button
-                key={stage.num}
-                type="button"
-                onClick={() => setActiveView('roadmap')}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '0.4rem 0.65rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: 'none',
-                  background: 'transparent',
-                  color: 'var(--text-secondary)',
-                  cursor: 'pointer',
-                  transition: 'background-color 150ms ease, color 150ms ease, transform 150ms var(--ease-out-quad)'
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.backgroundColor = 'var(--bg-surface-hover)'
-                  e.currentTarget.style.color = 'var(--text-primary)'
-                  e.currentTarget.style.transform = 'translateX(2px)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.backgroundColor = 'transparent'
-                  e.currentTarget.style.color = 'var(--text-secondary)'
-                  e.currentTarget.style.transform = 'translateX(0)'
-                }}
-                onMouseDown={e => {
-                  e.currentTarget.style.transform = 'scale(0.98)'
-                }}
-                onMouseUp={e => {
-                  e.currentTarget.style.transform = 'translateX(2px)'
-                }}
-              >
-                <span>{stage.num}. {stage.label}</span>
-                <span className={`badge ${stage.variant}`} style={{ fontSize: '0.65rem' }}>{stage.badge}</span>
-              </button>
-            ))}
+              { num: '1', label: 'Analyst Basics', badge: 'P1–4', variant: 'badge-success', stageId: 'stage-a' },
+              { num: '2', label: 'Strong Analyst', badge: 'P5–9', variant: 'badge-warning', stageId: 'stage-b' },
+              { num: '3', label: 'Analytics Engineer', badge: 'P10–15', variant: 'badge-info', stageId: 'stage-c' },
+              { num: '4', label: 'Final Projects', badge: 'P16–19', variant: 'badge-default', stageId: 'stage-d' }
+            ].map(stage => {
+              const isStageActive = activeView === 'roadmap' && roadmapStageFilter === stage.stageId
+
+              return (
+                <button
+                  key={stage.num}
+                  type="button"
+                  data-testid={`sidebar-stage-${stage.stageId}`}
+                  onClick={() => navigateToStage(stage.stageId)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0.4rem 0.65rem',
+                    borderRadius: 'var(--radius-sm)',
+                    border: 'none',
+                    backgroundColor: isStageActive ? 'var(--bg-surface-elevated)' : 'transparent',
+                    color: isStageActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                    fontWeight: isStageActive ? 600 : 500,
+                    boxShadow: isStageActive ? 'inset 3px 0 0 var(--accent-primary)' : 'none',
+                    cursor: 'pointer',
+                    transition: 'background-color 150ms ease, color 150ms ease, transform 150ms var(--ease-out-quad), box-shadow 150ms ease'
+                  }}
+                  onMouseEnter={e => {
+                    if (!isStageActive) {
+                      e.currentTarget.style.backgroundColor = 'var(--bg-surface-hover)'
+                      e.currentTarget.style.color = 'var(--text-primary)'
+                      e.currentTarget.style.transform = 'translateX(2px)'
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (!isStageActive) {
+                      e.currentTarget.style.backgroundColor = 'transparent'
+                      e.currentTarget.style.color = 'var(--text-secondary)'
+                      e.currentTarget.style.transform = 'translateX(0)'
+                    }
+                  }}
+                  onMouseDown={e => {
+                    e.currentTarget.style.transform = 'scale(0.98)'
+                  }}
+                  onMouseUp={e => {
+                    e.currentTarget.style.transform = isStageActive ? 'translateX(0)' : 'translateX(2px)'
+                  }}
+                >
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                    {isStageActive && (
+                      <span
+                        style={{
+                          width: '6px',
+                          height: '6px',
+                          borderRadius: '50%',
+                          backgroundColor: 'var(--accent-primary)',
+                          display: 'inline-block'
+                        }}
+                      />
+                    )}
+                    <span>{stage.num}. {stage.label}</span>
+                  </span>
+                  <span className={`badge ${stage.variant}`} style={{ fontSize: '0.65rem' }}>{stage.badge}</span>
+                </button>
+              )
+            })}
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import {
   Route,
   Filter,
@@ -19,9 +19,16 @@ import { Topic, Phase } from '../../types'
 import { calculatePhaseCompetency, calculateTopicCompetency } from '../../services/competencyEngine'
 
 export const RoadmapView: React.FC = () => {
-  const { state, setSelectedTopicId, setSelectedPhaseId, setActiveView, updatePhaseToolChoice } = useApp()
+  const {
+    state,
+    setSelectedTopicId,
+    setSelectedPhaseId,
+    setActiveView,
+    updatePhaseToolChoice,
+    roadmapStageFilter,
+    setRoadmapStageFilter
+  } = useApp()
 
-  const [stageFilter, setStageFilter] = useState<string>('all')
   const [sortBy, setSortBy] = useState<'canonical' | 'priority' | 'competency' | 'competency-asc' | 'reviews'>('canonical')
   const [expandedPhases, setExpandedPhases] = useState<Record<number, boolean>>({
     1: true,
@@ -38,17 +45,17 @@ export const RoadmapView: React.FC = () => {
   const filteredPhases = useMemo(() => {
     let list = state.phases
 
-    if (stageFilter === 'stage-a') list = list.filter(p => p.stageId === 'stage-a')
-    else if (stageFilter === 'stage-b') list = list.filter(p => p.stageId === 'stage-b')
-    else if (stageFilter === 'stage-c') list = list.filter(p => p.stageId === 'stage-c')
-    else if (stageFilter === 'stage-d') list = list.filter(p => p.stageId === 'stage-d')
-    else if (stageFilter === 'target') {
+    if (roadmapStageFilter === 'stage-a') list = list.filter(p => p.stageId === 'stage-a')
+    else if (roadmapStageFilter === 'stage-b') list = list.filter(p => p.stageId === 'stage-b')
+    else if (roadmapStageFilter === 'stage-c') list = list.filter(p => p.stageId === 'stage-c')
+    else if (roadmapStageFilter === 'stage-d') list = list.filter(p => p.stageId === 'stage-d')
+    else if (roadmapStageFilter === 'target') {
       const target = state.user.careerTarget
       if (target === 'Data Analyst') list = list.filter(p => p.stageId === 'stage-a')
       else if (target === 'Strong Data Analyst') list = list.filter(p => p.stageId === 'stage-a' || p.stageId === 'stage-b')
       else if (target === 'Analytics Engineer') list = list.filter(p => p.stageId === 'stage-c' || p.stageId === 'stage-d')
       // if 'Both', show all 19
-    } else if (stageFilter === 'needs-review') {
+    } else if (roadmapStageFilter === 'needs-review') {
       const reviewPhaseIds = new Set(
         Object.values(state.topics)
           .filter(t => t.needsReview)
@@ -68,7 +75,7 @@ export const RoadmapView: React.FC = () => {
     }
 
     return list
-  }, [state.phases, state.topics, state.user.careerTarget, stageFilter, sortBy])
+  }, [state.phases, state.topics, state.user.careerTarget, roadmapStageFilter, sortBy])
 
   const allFilteredIds = useMemo(() => filteredPhases.map(p => p.id), [filteredPhases])
   const areAllExpanded = allFilteredIds.length > 0 && allFilteredIds.every(id => expandedPhases[id])
@@ -89,8 +96,30 @@ export const RoadmapView: React.FC = () => {
     }
   }
 
+  // Auto-expand phases when filtering by a specific stage
+  useEffect(() => {
+    if (roadmapStageFilter && roadmapStageFilter !== 'all') {
+      setExpandedPhases(prev => {
+        const next = { ...prev }
+        state.phases.forEach(p => {
+          if (
+            (roadmapStageFilter === 'stage-a' && p.stageId === 'stage-a') ||
+            (roadmapStageFilter === 'stage-b' && p.stageId === 'stage-b') ||
+            (roadmapStageFilter === 'stage-c' && p.stageId === 'stage-c') ||
+            (roadmapStageFilter === 'stage-d' && p.stageId === 'stage-d') ||
+            roadmapStageFilter === 'target' ||
+            roadmapStageFilter === 'needs-review'
+          ) {
+            next[p.id] = true
+          }
+        })
+        return next
+      })
+    }
+  }, [roadmapStageFilter, state.phases])
+
   const handleStageFilterChange = (newFilter: string) => {
-    setStageFilter(newFilter)
+    setRoadmapStageFilter(newFilter)
     if (newFilter !== 'all') {
       setExpandedPhases(prev => {
         const next = { ...prev }
@@ -121,6 +150,45 @@ export const RoadmapView: React.FC = () => {
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
             Learn step-by-step from beginner analyst to analytics engineer ({filteredPhases.length} of 19 phases visible)
           </p>
+          {roadmapStageFilter !== 'all' && (
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              marginTop: '0.4rem',
+              padding: '0.25rem 0.65rem',
+              backgroundColor: 'var(--accent-subtle)',
+              borderRadius: 'var(--radius-full)',
+              border: '1px solid var(--accent-primary)',
+              fontSize: '0.75rem',
+              color: 'var(--accent-primary)',
+              fontWeight: 500
+            }}>
+              <span>
+                Filtered by: <strong>{stageLabels[roadmapStageFilter] || roadmapStageFilter}</strong>
+              </span>
+              <button
+                type="button"
+                data-testid="roadmap-clear-filter-chip"
+                onClick={() => handleStageFilterChange('all')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--accent-primary)',
+                  cursor: 'pointer',
+                  padding: '0 2px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  fontWeight: 700,
+                  fontSize: '0.8125rem'
+                }}
+                title="Show all 19 phases"
+                aria-label="Clear stage filter"
+              >
+                ✕
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Filter and Sort Bar */}
@@ -130,7 +198,7 @@ export const RoadmapView: React.FC = () => {
             <Filter size={14} style={{ color: 'var(--text-muted)' }} />
             <select
               data-testid="roadmap-stage-filter"
-              value={stageFilter}
+              value={roadmapStageFilter}
               onChange={e => handleStageFilterChange(e.target.value)}
               style={{
                 padding: '0.35rem 0.65rem',
@@ -197,10 +265,10 @@ export const RoadmapView: React.FC = () => {
           <div className="card" style={{ textAlign: 'center', padding: '3rem 1.5rem', backgroundColor: 'var(--bg-surface)' }}>
             <CheckCircle2 size={36} style={{ color: 'var(--success)', margin: '0 auto 0.75rem auto' }} />
             <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
-              {stageFilter === 'needs-review' ? 'No Topics Need Review Right Now!' : 'No Phases Match Your Selected Filter'}
+              {roadmapStageFilter === 'needs-review' ? 'No Topics Need Review Right Now!' : 'No Phases Match Your Selected Filter'}
             </h3>
             <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
-              {stageFilter === 'needs-review'
+              {roadmapStageFilter === 'needs-review'
                 ? 'All topics in your roadmap are retained in good standing with zero review flags.'
                 : 'Try switching to All Phases or selecting another filter option.'}
             </p>

@@ -28,7 +28,10 @@ export const MobileNavDrawer: React.FC = () => {
     resetToSampleState,
     exportStateJson,
     importStateJson,
-    showToast
+    showToast,
+    roadmapStageFilter,
+    setRoadmapStageFilter,
+    navigateToStage
   } = useApp()
 
   const [confirmModal, setConfirmModal] = useState<'clean' | 'sample' | null>(null)
@@ -46,6 +49,9 @@ export const MobileNavDrawer: React.FC = () => {
 
   const handleNavigate = (viewId: string) => {
     setActiveView(viewId)
+    if (viewId === 'roadmap') {
+      setRoadmapStageFilter('all')
+    }
     setIsMobileNavOpen(false)
   }
 
@@ -174,6 +180,85 @@ export const MobileNavDrawer: React.FC = () => {
                 </button>
               )
             })}
+          </div>
+
+          <hr style={{ border: 'none', borderTop: '1px solid var(--border-subtle)', margin: '0.5rem 0' }} />
+
+          {/* Career Stages Quick Jump */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              fontSize: '0.6875rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+              color: 'var(--text-muted)',
+              fontWeight: 600,
+              padding: '0 0.5rem 0.25rem 0.5rem'
+            }}>
+              <span>Stages</span>
+              {activeView === 'roadmap' && roadmapStageFilter !== 'all' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRoadmapStageFilter('all')
+                    setIsMobileNavOpen(false)
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--accent-primary)',
+                    fontSize: '0.65rem',
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                    padding: 0
+                  }}
+                >
+                  Show All
+                </button>
+              )}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              {[
+                { num: '1', label: 'Analyst Basics', badge: 'P1–4', variant: 'badge-success', stageId: 'stage-a' },
+                { num: '2', label: 'Strong Analyst', badge: 'P5–9', variant: 'badge-warning', stageId: 'stage-b' },
+                { num: '3', label: 'Analytics Engineer', badge: 'P10–15', variant: 'badge-info', stageId: 'stage-c' },
+                { num: '4', label: 'Final Projects', badge: 'P16–19', variant: 'badge-default', stageId: 'stage-d' }
+              ].map(stage => {
+                const isStageActive = activeView === 'roadmap' && roadmapStageFilter === stage.stageId
+                return (
+                  <button
+                    key={stage.num}
+                    type="button"
+                    onClick={() => {
+                      navigateToStage(stage.stageId)
+                      setIsMobileNavOpen(false)
+                    }}
+                    className={`mobile-nav-link ${isStageActive ? 'active' : ''}`}
+                    style={{
+                      justifyContent: 'space-between',
+                      padding: '0.45rem 0.65rem',
+                      fontSize: '0.85rem'
+                    }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      {isStageActive && (
+                        <span style={{
+                          width: '6px',
+                          height: '6px',
+                          borderRadius: '50%',
+                          backgroundColor: 'var(--accent-primary)',
+                          display: 'inline-block'
+                        }} />
+                      )}
+                      <span>{stage.num}. {stage.label}</span>
+                    </span>
+                    <span className={`badge ${stage.variant}`} style={{ fontSize: '0.65rem' }}>{stage.badge}</span>
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
           <hr style={{ border: 'none', borderTop: '1px solid var(--border-subtle)', margin: '0.5rem 0' }} />

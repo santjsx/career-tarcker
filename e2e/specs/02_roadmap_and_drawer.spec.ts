@@ -125,4 +125,56 @@ test.describe('Roadmap Navigation, Filtering, and Topic Drawer', () => {
     await roadmap.closeDrawer()
     await expect(page.locator('.drawer')).not.toBeVisible()
   })
+
+  test('should navigate and filter roadmap when clicking Stages in sidebar', async ({ page }) => {
+    // Start on Dashboard
+    await app.navigateTo('Dashboard')
+    await expect(page.locator('text=Your Learning Progress')).toBeVisible()
+
+    // 1. Click "2. Strong Analyst" in sidebar Stages
+    const stage2Btn = page.locator('[data-testid="sidebar-stage-stage-b"]')
+    await expect(stage2Btn).toBeVisible()
+    await stage2Btn.click()
+
+    // Should switch to Roadmap view
+    await roadmap.verifyRoadmapHeader()
+    // Should filter to stage B (Phase 5 visible, Phase 1 not visible)
+    await expect(page.locator('text=PHASE 05')).toBeVisible()
+    await expect(page.locator('text=PHASE 09')).toBeVisible()
+    await expect(page.locator('text=PHASE 01')).not.toBeVisible()
+    // Filter chip should be visible
+    await expect(page.locator('[data-testid="roadmap-clear-filter-chip"]')).toBeVisible()
+    // Dropdown in roadmap should show stage-b
+    await expect(page.locator('select[data-testid="roadmap-stage-filter"]')).toHaveValue('stage-b')
+
+    // 2. Click "3. Analytics Engineer" in sidebar Stages
+    const stage3Btn = page.locator('[data-testid="sidebar-stage-stage-c"]')
+    await stage3Btn.click()
+    await expect(page.locator('text=PHASE 10')).toBeVisible()
+    await expect(page.locator('text=PHASE 15')).toBeVisible()
+    await expect(page.locator('text=PHASE 05')).not.toBeVisible()
+
+    // 3. Click "4. Final Projects" in sidebar Stages
+    const stage4Btn = page.locator('[data-testid="sidebar-stage-stage-d"]')
+    await stage4Btn.click()
+    await expect(page.locator('text=PHASE 16')).toBeVisible()
+    await expect(page.locator('text=PHASE 19')).toBeVisible()
+    await expect(page.locator('text=PHASE 10')).not.toBeVisible()
+
+    // 4. Click "1. Analyst Basics" in sidebar Stages
+    const stage1Btn = page.locator('[data-testid="sidebar-stage-stage-a"]')
+    await stage1Btn.click()
+    await expect(page.locator('text=PHASE 01')).toBeVisible()
+    await expect(page.locator('text=PHASE 04')).toBeVisible()
+    await expect(page.locator('text=PHASE 16')).not.toBeVisible()
+
+    // 5. Click "Show All" in sidebar Stages header
+    const showAllBtn = page.locator('[data-testid="sidebar-clear-stage-filter"]')
+    await expect(showAllBtn).toBeVisible()
+    await showAllBtn.click()
+    await expect(page.locator('text=19 of 19 phases visible')).toBeVisible()
+    await expect(page.locator('text=PHASE 01')).toBeVisible()
+    await expect(page.locator('text=PHASE 19')).toBeVisible()
+  })
 })
+
